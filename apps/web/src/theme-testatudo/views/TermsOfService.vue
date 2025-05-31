@@ -4,8 +4,8 @@
             <div class="bg-white rounded-lg px-4 sm:px-6 py-8">
                 <h1 class="text-3xl font-bold mb-6 text-neutral-900">Termos de Serviço</h1>
                 <a id="terms-of-service" title="Termos de serviço"></a>
-                <p class="mb-4 text-neutral-700">Os termos que você concorda ao usar o software e serviços CMMV.</p>
-                <p class="mb-6 text-neutral-700"><strong>Última atualização em 25 de março de 2025</strong></p>
+                <p class="mb-4 text-neutral-700">Os termos que você concorda ao usar o software e serviços Testa Tudo.</p>
+                <p class="mb-6 text-neutral-700"><strong>Última atualização em 31 de maio de 2025</strong></p>
 
                 <h2 class="text-2xl font-semibold mt-8 mb-4 text-neutral-800">Geral</h2>
                 <a id="general" title="Geral"></a>
@@ -22,11 +22,11 @@
                 <p class="mb-4 text-neutral-700">Sujeito ao seu cumprimento deste Acordo, o Autor concede a você um direito não transferível, não exclusivo e mundial para acessar e usar os Serviços sob os termos da Licença MIT (a "Licença").</p>
                 <p class="mb-4 text-neutral-700">A Licença é concedida gratuitamente a todos os usuários e é válida para uso em todos os sistemas operacionais suportados. Você pode usar o CMMV em vários dispositivos, desde que cumpra os termos da Licença MIT. O texto completo da Licença MIT está incluído abaixo.</p>
 
-                <h2 class="text-2xl font-semibold mt-8 mb-4 text-neutral-800">CMMV</h2>
-                            <a id="cmmv" title="CMMV"></a>
+                <h2 class="text-2xl font-semibold mt-8 mb-4 text-neutral-800">Testa Tudo</h2>
+                            <a id="testatudo" title="Testa Tudo"></a>
 
                 <h3 class="text-xl font-medium mt-6 mb-3 text-neutral-800">A. Uso Gratuito</h3>
-                <p class="mb-4 text-neutral-700">A Licença permite o uso gratuito do CMMV para qualquer finalidade, incluindo:</p>
+                <p class="mb-4 text-neutral-700">A Licença permite o uso gratuito do CMMV e Testa Tudo para qualquer finalidade, incluindo:</p>
                 <ul class="mb-4 pl-5 list-disc text-neutral-700">
                     <li class="mb-2">Uso pessoal (ex.: projetos privados, pesquisa)</li>
                     <li class="mb-2">Uso comercial (ex.: aplicações empresariais)</li>
@@ -53,7 +53,7 @@
                 <p class="mb-4 text-neutral-700">Você não deve remover ou alterar quaisquer avisos de direitos autorais em qualquer cópia do CMMV ou sua documentação.</p>
 
                 <h3 class="text-xl font-medium mt-6 mb-3 text-neutral-800">Propriedade</h3>
-                <p class="mb-4 text-neutral-700">O CMMV e os Serviços são licenciados, não vendidos. Todos os direitos não expressamente concedidos a você neste Acordo ou na Licença MIT são reservados por mim. Você não pode copiar, modificar, traduzir, publicar, transmitir, distribuir, executar, exibir, usar ou vender qualquer Conteúdo do Autor além do que é permitido pela Licença MIT. Você não deve modificar, construir sobre ou bloquear qualquer parte ou funcionalidade dos Serviços, exceto conforme permitido pela Licença.</p>
+                <p class="mb-4 text-neutral-700">O CMMV e Testa Tudo e os Serviços são licenciados, não vendidos. Todos os direitos não expressamente concedidos a você neste Acordo ou na Licença MIT são reservados por mim. Você não pode copiar, modificar, traduzir, publicar, transmitir, distribuir, executar, exibir, usar ou vender qualquer Conteúdo do Autor além do que é permitido pela Licença MIT. Você não deve modificar, construir sobre ou bloquear qualquer parte ou funcionalidade dos Serviços, exceto conforme permitido pela Licença.</p>
 
                 <h3 class="text-xl font-medium mt-6 mb-3 text-neutral-800">Software</h3>
                 <p class="mb-4 text-neutral-700">Eu concedo a você uma licença mundial, não sublicenciável, não transferível e não exclusiva para instalar e executar o CMMV e software relacionado ("Software") em máquinas operadas por você ou para você, exclusivamente para usar os Serviços de acordo com a Licença MIT. O Software é licenciado, não vendido, e inclui código liberado sob a Licença MIT. Também pode incluir código de terceiros sob licenças de código aberto compatíveis, conforme observado na documentação.</p>
@@ -72,7 +72,7 @@
                 <a id="security-and-privacy" title="Segurança e Privacidade"></a>
 
                 <h3 class="text-xl font-medium mt-6 mb-3 text-neutral-800">Segurança</h3>
-                <p class="mb-4 text-neutral-700">O CMMV opera localmente em seu dispositivo. Eu não controlo nem armazeno seus dados, a menos que explicitamente declarado em futuros serviços opcionais. Você entende que o uso dos Serviços pode envolver a transmissão de dados por redes não controladas por mim, e não sou responsável por dados perdidos, alterados, interceptados ou armazenados em tais redes. Não posso garantir que terceiros não autorizados nunca derrotarão as medidas de segurança.</p>
+                <p class="mb-4 text-neutral-700">O CMMV e Testa Tudo operam localmente em seu dispositivo. Eu não controlo nem armazeno seus dados, a menos que explicitamente declarado em futuros serviços opcionais. Você entende que o uso dos Serviços pode envolver a transmissão de dados por redes não controladas por mim, e não sou responsável por dados perdidos, alterados, interceptados ou armazenados em tais redes. Não posso garantir que terceiros não autorizados nunca derrotarão as medidas de segurança.</p>
 
                 <h3 class="text-xl font-medium mt-6 mb-3 text-neutral-800">Privacidade</h3>
                 <p class="mb-4 text-neutral-700">Nenhuma informação pessoal é coletada, a menos que você a forneça voluntariamente (por exemplo, via contribuições da comunidade ou contato). Se serviços opcionais forem introduzidos no futuro, qualquer tratamento de dados será divulgado de forma transparente.</p>
@@ -84,7 +84,7 @@
                 <h2 class="text-2xl font-semibold mt-8 mb-4 text-neutral-800">Limitações de Responsabilidade</h2>
                 <a id="limitations-of-liability" title="Limitações de Responsabilidade"></a>
                 <p class="mb-4 text-neutral-700 font-medium">ATÉ O MÁXIMO PERMITIDO POR LEI, NÃO SEREI RESPONSÁVEL POR QUAISQUER DANOS PESSOAIS, DANOS À PROPRIEDADE, PERDA DE USO, PERDA DE DADOS, INTERRUPÇÃO DE NEGÓCIOS, LUCROS CESSANTES OU QUAISQUER DANOS INDIRETOS, ESPECIAIS, INCIDENTAIS OU CONSEQUENCIAIS, MESMO SE INFORMADO DA POSSIBILIDADE. MINHA RESPONSABILIDADE TOTAL NÃO EXCEDERÁ O VALOR QUE VOCÊ ME PAGOU PELOS SERVIÇOS
-                    (QUE É ZERO, JÁ QUE O CMMV É GRATUITO). ESTA LIMITAÇÃO É UMA BASE FUNDAMENTAL DESTE ACORDO.</p>
+                    (QUE É ZERO, JÁ QUE O CMMV E TESTA TUDOS SÃO GRATUITOS). ESTA LIMITAÇÃO É UMA BASE FUNDAMENTAL DESTE ACORDO.</p>
 
                 <h2 class="text-2xl font-semibold mt-8 mb-4 text-neutral-800">Prazo e Rescisão</h2>
                 <a id="term-and-termination" title="Prazo e Rescisão"></a>
@@ -134,11 +134,11 @@ useHead({
     meta: [
         {
             name: 'description',
-            content: 'Termos de Serviço para GameDevBR'
+            content: 'Termos de Serviço para Testa Tudo'
         },
         {
             name: 'keywords',
-            content: 'GameDevBR, Termos de Serviço, CMMV'
+            content: 'Testa Tudo, Termos de Serviço, CMMV'
         }
     ]
 })

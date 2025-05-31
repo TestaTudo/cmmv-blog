@@ -4,19 +4,19 @@
             <div class="bg-white rounded-lg px-4 sm:px-6 py-8">
                 <h1 class="text-3xl font-bold mb-6 text-neutral-900">Política de Privacidade</h1>
                 <a id="privacy" title="Privacidade"></a>
-                <p class="mb-4 text-neutral-700">A política de privacidade que você concorda ao usar o software e serviços CMMV.</p>
-                <p class="mb-6 text-neutral-700"><strong>Última atualização em 25 de março de 2025</strong></p>
+                <p class="mb-4 text-neutral-700">A política de privacidade que você concorda ao usar o software e serviços CMMV e Testa Tudo.</p>
+                <p class="mb-6 text-neutral-700"><strong>Última atualização em 31 de maio de 2025</strong></p>
 
                 <h2 class="text-2xl font-semibold mt-8 mb-4 text-neutral-800">Resumo</h2>
                 <a id="summary" title="Resumo"></a>
-                <p class="mb-4 text-neutral-700">Eu priorizo sua privacidade garantindo que você mantenha controle total sobre seus dados. Veja como lido com sua privacidade com base em como você interage com o CMMV.</p>
+                <p class="mb-4 text-neutral-700">Eu priorizo sua privacidade garantindo que você mantenha controle total sobre seus dados. Veja como lido com sua privacidade com base em como você interage com o CMMV e Testa Tudo.</p>
 
-                <h3 class="text-xl font-medium mt-6 mb-3 text-neutral-800">Software CMMV</h3>
+                <h3 class="text-xl font-medium mt-6 mb-3 text-neutral-800">Software CMMV e Testa Tudo</h3>
                 <ul class="mb-4 pl-5 list-disc text-neutral-700">
                     <li class="mb-2">Todos os dados são salvos localmente no seu dispositivo e nunca são enviados para servidores controlados por mim.</li>
-                    <li class="mb-2">Eu não coletamos dados pessoais do seu uso do CMMV.</li>
+                    <li class="mb-2">Eu não coletamos dados pessoais do seu uso do CMMV e Testa Tudo.</li>
                     <li class="mb-2">Eu não coletamos dados de telemetria.</li>
-                    <li class="mb-2">O CMMV pode se conectar à internet para verificar atualizações ou baixar recursos da comunidade (por exemplo, plugins), mas você pode desativar isso nas configurações, se disponível.</li>
+                    <li class="mb-2">O CMMV e Testa Tudo podem se conectar à internet para verificar atualizações ou baixar recursos da comunidade (por exemplo, plugins), mas você pode desativar isso nas configurações, se disponível.</li>
                     <li class="mb-2">Se plugins ou extensões de terceiros forem usados, seus desenvolvedores são responsáveis por divulgar qualquer uso de rede ou coleta de dados. Eu não controlo nem endosso componentes de terceiros.</li>
                 </ul>
 
@@ -36,11 +36,11 @@
                 <a id="privacy-policy" title="Política de Privacidade"></a>
 
                 <h3 class="text-xl font-medium mt-6 mb-3 text-neutral-800">Política do CMMV sobre Privacidade</h3>
-                <p class="mb-4 text-neutral-700">Eu, André Ferreira, estou comprometido em proteger sua privacidade e segurança ao usar o CMMV. Esta política explica quais informações pessoais (se houver) eu coleto, como são usadas e as medidas que tomo para garantir que sejam tratadas adequadamente.</p>
+                <p class="mb-4 text-neutral-700">Eu, André Ferreira, estou comprometido em proteger sua privacidade e segurança ao usar o CMMV e Testa Tudo. Esta política explica quais informações pessoais (se houver) eu coleto, como são usadas e as medidas que tomo para garantir que sejam tratadas adequadamente.</p>
                 <p class="mb-4 text-neutral-700">Esta política foi projetada para se alinhar com as leis brasileiras aplicáveis de proteção de dados, incluindo a Lei Geral de Proteção de Dados (LGPD – Lei nº 13.709/2018).</p>
 
                 <h3 class="text-xl font-medium mt-6 mb-3 text-neutral-800">Quem sou eu?</h3>
-                <p class="mb-4 text-neutral-700">Para os fins desta Política de Privacidade, "Eu" refere-se a André Ferreira, o indivíduo que desenvolve e fornece o CMMV e recursos relacionados.</p>
+                <p class="mb-4 text-neutral-700">Para os fins desta Política de Privacidade, "Eu" refere-se a André Ferreira, o indivíduo que desenvolve e fornece o CMMV e Testa Tudo.</p>
 
                 <h3 class="text-xl font-medium mt-6 mb-3 text-neutral-800">O que são informações pessoais?</h3>
                 <p class="mb-4 text-neutral-700">Informações pessoais são dados que identificam especificamente um indivíduo, como nome, endereço de e-mail ou data de nascimento. Informações disponíveis em diretórios públicos, registros ou publicações não são consideradas informações pessoais sob esta política.</p>
@@ -49,7 +49,7 @@
                 <p class="mb-4 text-neutral-700">Sou responsável por quaisquer informações pessoais sob meu controle e me esforço para manter os princípios de privacidade descritos aqui.</p>
 
                 <h3 class="text-xl font-medium mt-6 mb-3 text-neutral-800">Por que coleto e uso suas informações pessoais (se for o caso)</h3>
-                <p class="mb-4 text-neutral-700">O CMMV em si não coleta informações pessoais. Se eu precisar coletar qualquer informação (por exemplo, para contribuições da comunidade ou futuros serviços opcionais), eu:</p>
+                <p class="mb-4 text-neutral-700">O CMMV e Testa Tudo em si não coletam informações pessoais. Se eu precisar coletar qualquer informação (por exemplo, para contribuições da comunidade ou futuros serviços opcionais), eu:</p>
                 <ul class="mb-4 pl-5 list-disc text-neutral-700">
                     <li class="mb-2">Declararei claramente o propósito antes ou no momento da coleta.</li>
                     <li class="mb-2">Usarei apenas para fins como:
@@ -93,10 +93,10 @@
                 </ul>
 
                 <h3 class="text-xl font-medium mt-6 mb-3 text-neutral-800">Links ou ferramentas de terceiros</h3>
-                <p class="mb-4 text-neutral-700">O CMMV pode vincular a sites de terceiros (por exemplo, documentação, fóruns da comunidade) ou suportar plugins de terceiros. Eu não controlo esses recursos externos e não sou responsável por suas práticas de privacidade. Verifique suas políticas diretamente se você os usar.</p>
+                <p class="mb-4 text-neutral-700">O CMMV e Testa Tudo podem vincular a sites de terceiros (por exemplo, documentação, fóruns da comunidade) ou suportar plugins de terceiros. Eu não controlo esses recursos externos e não sou responsável por suas práticas de privacidade. Verifique suas políticas diretamente se você os usar.</p>
 
                 <h3 class="text-xl font-medium mt-6 mb-3 text-neutral-800">Sou transparente sobre privacidade</h3>
-                <p class="mb-4 text-neutral-700">Meu objetivo é tornar minhas práticas de privacidade claras e acessíveis. Esta política está disponível no site ou repositório do CMMV, ou você pode solicitá-la diretamente a mim.</p>
+                <p class="mb-4 text-neutral-700">Meu objetivo é tornar minhas práticas de privacidade claras e acessíveis. Esta política está disponível no site ou repositório do CMMV e Testa Tudo, ou você pode solicitá-la diretamente a mim.</p>
 
                 <h3 class="text-xl font-medium mt-6 mb-3 text-neutral-800">Você pode acessar suas informações</h3>
                 <p class="mb-4 text-neutral-700">Se eu coletei alguma informação pessoal de você (por exemplo, via e-mail), você pode solicitar para vê-la, verificar sua precisão ou pedir atualizações. Entre em contato comigo conforme descrito abaixo. Eu responderei com:</p>
@@ -111,7 +111,7 @@
 
                 <h3 class="text-xl font-medium mt-6 mb-3 text-neutral-800">Como entrar em contato comigo</h3>
                 <p class="mb-4 text-neutral-700">Envie-me um e-mail para: <code class="px-1.5 py-0.5 bg-gray-100 rounded">andre@cmmv.io</code>.</p>
-                <p class="mb-4 text-neutral-700">Esta política pode evoluir à medida que o CMMV cresce. Verifique o site ou repositório do CMMV para atualizações. Não reduzirei as proteções para informações previamente coletadas sem o seu consentimento.</p>
+                <p class="mb-4 text-neutral-700">Esta política pode evoluir à medida que o CMMV e Testa Tudo crescem. Verifique o site ou repositório do CMMV e Testa Tudo para atualizações. Não reduzirei as proteções para informações previamente coletadas sem o seu consentimento.</p>
             </div>
         </div>
     </div>
@@ -125,11 +125,11 @@ useHead({
     meta: [
         {
             name: 'description',
-            content: 'Política de Privacidade para GameDevBR'
+            content: 'Política de Privacidade para Testa Tudo'
         },
         {
             name: 'keywords',
-            content: 'GameDevBR, Política de Privacidade, CMMV'
+            content: 'Testa Tudo, Política de Privacidade, CMMV'
         }
     ]
 })
