@@ -1,7 +1,7 @@
 <template>
     <div class="w-full max-w-[1200px] mx-auto px-4">
         <!-- Cover Section -->
-        <section v-if="posts.length > 0" class="mb-8 md:block hidden">
+        <section v-if="posts.length > 0" class="mb-8 mt-4 md:block hidden">
             <!-- Full Layout (default) -->
             <div v-if="coverSettings.layoutType === 'full' || !coverSettings.layoutType" class="bg-white rounded-lg overflow-hidden shadow-md">
                 <a v-if="coverPosts.full" :href="`/post/${coverPosts.full.slug}`" class="block">
@@ -238,8 +238,7 @@
 
                 <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                     <a v-for="campaign in featuredCampaigns.slice(0, 18)" :key="campaign.id" :href="`/desconto/${campaign.slug}`"
-                        class="store-card bg-white border border-gray-200 rounded-lg p-4 flex items-center justify-center hover:shadow-lg transition-all"
-                        :class="{'border-indigo-200 bg-indigo-50': campaign.highlight}">
+                        class="store-card bg-white border border-gray-200 rounded-lg p-4 flex items-center justify-center hover:shadow-lg transition-all">
                         <div class="text-center">
                             <div class="w-16 h-16 mx-auto mb-2 flex items-center justify-center">
                                 <img v-if="campaign.logo" :src="campaign.logo" :alt="campaign.name" class="max-w-full max-h-full">
@@ -260,7 +259,7 @@
             <section class="container card-carousel mb-12">
                 <div class="flex items-center justify-between mb-8">
                     <h2 class="text-2xl font-bold text-gray-800">Top cupons</h2>
-                    <a href="/descontos" class="text-indigo-600 hover:text-indigo-800 font-medium">Ver todos</a>
+                    <a href="#top-25-cupons" class="text-indigo-600 hover:text-indigo-800 font-medium">Ver todos</a>
                 </div>
                 <div id="coupon-cards" class="relative">
                     <div class="overflow-hidden">
@@ -268,37 +267,34 @@
                             :style="`transform: translateX(-${currentCouponIndex * (100 / couponSlidesVisible)}%);`">
                             <div v-for="coupon in featuredCoupons.slice(0, 10)" :key="coupon.id"
                                 class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 flex-shrink-0">
-                                <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all h-full flex flex-col p-4">
-                                    <div class="flex-shrink-0 mb-2 h-16 flex items-center justify-center">
-                                        <img v-if="coupon.campaignLogo" :src="coupon.campaignLogo" :alt="coupon.campaignName"
-                                            class="max-h-12 max-w-full object-contain">
-                                        <div v-else class="w-16 h-12 bg-gray-200 flex items-center justify-center rounded-md">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                                            </svg>
+                                <a :href="coupon.campaignSlug ? `/desconto/${coupon.campaignSlug}` : '#'"
+                                   class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all h-full flex flex-col p-0 block">
+                                    <div class="p-4 pb-3">
+                                        <div class="flex-shrink-0 h-24 flex items-center justify-center">
+                                            <img v-if="coupon.campaignLogo" :src="coupon.campaignLogo" :alt="coupon.campaignName"
+                                                class="max-h-20 max-w-full object-contain">
+                                            <div v-else class="w-20 h-20 bg-gray-200 flex items-center justify-center rounded-md">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                                </svg>
+                                            </div>
                                         </div>
                                     </div>
-                                    <h4 class="text-sm font-medium text-gray-700 text-center mb-2 truncate" :title="coupon.campaignName">{{ coupon.campaignName }}</h4>
-                                    <div class="flex-1 flex flex-col text-center">
-                                        <p class="text-base font-bold text-gray-800 mb-1 line-clamp-2 h-12">{{ coupon.title }}</p>
-                                        <p v-if="coupon.code" class="text-xs text-gray-500 mb-3">{{ coupon.code.length > 3 ? '****' + coupon.code.substring(coupon.code.length - 3) : coupon.code }}</p>
-                                        <p v-else class="text-xs text-gray-500 mb-3">Oferta especial</p>
+                                    <div class="flex-1 flex flex-col text-center p-4 pt-3 mt-auto">
+                                        <p class="text-sm font-bold text-gray-800 mb-1 line-clamp-2 h-10">{{ coupon.title }}</p>
                                     </div>
-                                    <a :href="coupon.campaignSlug ? `/desconto/${coupon.campaignSlug}/${coupon.id}` : '#'" 
-                                       class="mt-auto block w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm text-center py-2 px-3 rounded-md transition-colors">
-                                        Ver Oferta
-                                    </a>
-                                </div>
+                                </a>
                             </div>
                         </div>
                     </div>
 
                     <!-- Carousel Controls -->
-                    <button @click="prevCouponSlide" 
+                    <button @click="prevCouponSlide"
                             class="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow-md rounded-full w-10 h-10 p-2 z-10 -ml-3 flex items-center justify-center text-gray-600 hover:text-gray-800 transition-colors">
                         <i class="fas fa-chevron-left"></i>
                     </button>
-                    <button @click="nextCouponSlide" 
+
+                    <button @click="nextCouponSlide"
                             class="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow-md rounded-full w-10 h-10 p-2 z-10 -mr-3 flex items-center justify-center text-gray-600 hover:text-gray-800 transition-colors">
                         <i class="fas fa-chevron-right"></i>
                     </button>
@@ -306,7 +302,7 @@
                     <!-- Carousel Bullets -->
                     <div class="flex justify-center mt-6 space-x-2">
                         <button v-for="i in Math.ceil(Math.min(10, featuredCoupons.length) / couponSlidesVisible)" :key="i"
-                            @click="currentCouponIndex = (i-1) * couponSlidesVisible" 
+                            @click="currentCouponIndex = (i-1) * couponSlidesVisible"
                             class="w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-gray-400 focus:outline-none transition-colors"
                             :class="{'bg-indigo-600': Math.floor(currentCouponIndex / couponSlidesVisible) === i-1}"></button>
                     </div>
@@ -314,7 +310,7 @@
             </section>
 
             <!-- Top 25 Cupons da Semana -->
-            <section class="mb-12">
+            <section id="top-25-cupons" class="mb-12">
                 <div class="flex items-center justify-between mb-8">
                     <h2 class="text-2xl font-bold text-gray-800">Os 25 melhores Cupons de Desconto da semana!</h2>
                 </div>
@@ -331,7 +327,7 @@
                 <div v-else class="space-y-4">
                     <div v-for="coupon in top25Coupons" :key="coupon.id"
                          class="bg-white border border-gray-200 rounded-lg p-4 md:p-6 flex flex-col md:flex-row items-center hover:shadow-lg transition-shadow duration-300">
-                        
+
                         <div class="w-24 h-16 md:w-32 md:h-20 flex-shrink-0 mb-4 md:mb-0 md:mr-6 flex items-center justify-center">
                             <img v-if="coupon.campaignLogo" :src="coupon.campaignLogo" :alt="coupon.campaignName"
                                  class="max-w-full max-h-full object-contain rounded">
@@ -345,7 +341,7 @@
                         <div class="flex-grow text-center md:text-left">
                             <h3 class="text-lg md:text-xl font-semibold text-gray-800 mb-1">{{ coupon.title }}</h3>
                             <p v-if="coupon.cashbackPercentage" class="text-sm text-green-600 font-medium mb-1">
-                                + {{ coupon.cashbackPercentage }}% de cashback 
+                                + {{ coupon.cashbackPercentage }}% de cashback
                                 <span v-if="coupon.oldCashbackPercentage" class="text-gray-500 line-through">(era {{coupon.oldCashbackPercentage}}%)</span>
                             </p>
                             <p class="text-gray-600 text-sm mb-2 line-clamp-2">{{ coupon.description }}</p>
@@ -356,16 +352,48 @@
                             </p>
                         </div>
 
-                        <div class="mt-4 md:mt-0 md:ml-6 flex-shrink-0">
+                        <div class="mt-4 md:mt-0 md:ml-6 flex-shrink-0 w-full md:w-48">
                             <button v-if="coupon.code"
                                 @click="openScratchModal(coupon)"
-                                class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-300 text-center w-full md:w-auto">
-                                Desbloquear <span class="ml-1">···{{ coupon.code.slice(-3) }}</span>
+                                class="coupon-button group relative w-full h-12 overflow-visible bg-white border border-gray-300 rounded-lg transition-all duration-200 hover:shadow-lg"
+                                :class="[
+                                    new Date(coupon.expiration) < new Date() ?
+                                        'border-gray-400 bg-gray-100 expired' :
+                                        'border-green-400 hover:border-green-500'
+                                ]">
+
+                                <!-- Área do código completo (sempre visível por baixo) -->
+                                <div class="absolute inset-0 flex items-center justify-end px-4 z-5"
+                                    :class="[new Date(coupon.expiration) < new Date() ?
+                                        'bg-gray-100' :
+                                        'bg-gradient-to-r from-green-50 to-emerald-50']">
+                                    <div class="font-mono text-sm font-bold px-3 py-2"
+                                        :class="[new Date(coupon.expiration) < new Date() ?
+                                            'border-gray-400 text-gray-600' :
+                                            'border-green-400 text-green-800']">
+                                        ...{{ coupon.code.slice(-4) }}
+                                    </div>
+                                </div>
+
+                                <!-- Parte verde "Ver Cupom" que funciona como tampa -->
+                                <div class="coupon-cover absolute inset-0 flex items-center px-4 transition-all duration-200 ease-in-out z-10"
+                                    :class="[new Date(coupon.expiration) < new Date() ?
+                                        'bg-gray-400' :
+                                        'bg-green-600']">
+
+                                    <!-- Texto VER CUPOM -->
+                                    <div class="flex items-center text-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                        </svg>
+                                        <span class="text-sm font-medium">Ver Cupom</span>
+                                    </div>
+                                </div>
                             </button>
                             <a v-else
                                :href="coupon.linkRef || (coupon.campaignSlug ? `/desconto/${coupon.campaignSlug}/${coupon.id}` : '#')"
                                target="_blank"
-                               class="inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-300 text-center w-full md:w-auto">
+                               class="inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-300 text-center w-full">
                                 Ver Desconto
                             </a>
                         </div>
@@ -413,27 +441,32 @@
         </div>
     </div>
 
-    <CouponScratchModal 
-        :visible="isScratchModalOpen" 
+    <CouponScratchModal
+        :visible="isScratchModalOpen"
         :coupon="selectedCouponForScratch"
         @close="closeScratchModal" />
 
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch, onServerPrefetch } from 'vue';
 import { useHead } from '@unhead/vue';
 import { vue3 } from '@cmmv/blog/client';
 import { vue3 as affiliateVue3 } from '@cmmv/affiliate/client';
 import { useSettingsStore } from '../../store/settings';
 import { usePostsStore } from '../../store/posts';
+import { useCampaignsStore } from '../../store/campaigns';
+import { useCouponsStore } from '../../store/coupons';
 import { formatDate, stripHtml } from '../../composables/useUtils';
 import CouponScratchModal from '../components/CouponScratchModal.vue';
 
 const settingsStore = useSettingsStore();
 const postsStore = usePostsStore();
+const campaignsStore = useCampaignsStore();
+const couponsStore = useCouponsStore();
 const blogAPI = vue3.useBlog();
 const affiliateAPI = affiliateVue3.useAffiliate();
+const isSSR = typeof window === 'undefined';
 
 // State
 const rawSettings = computed(() => settingsStore.getSettings);
@@ -450,9 +483,9 @@ const settings = computed<Record<string, any>>(() => {
     return blogSettings;
 });
 const posts = ref<any[]>(postsStore.getPosts || []);
-const campaigns = ref<any[]>([]);
-const featuredCoupons = ref<any[]>([]);
-const top25Coupons = ref<any[]>([]);
+const campaigns = ref<any[]>(campaignsStore.getCampaigns || []);
+const featuredCoupons = ref<any[]>(couponsStore.getFeaturedCoupons || []);
+const top25Coupons = ref<any[]>(couponsStore.getTop25Coupons || []);
 const loading = ref(true);
 const error = ref(null);
 const searchQuery = ref('');
@@ -467,24 +500,13 @@ const couponSlidesVisible = ref(3);
 const isScratchModalOpen = ref(false);
 const selectedCouponForScratch = ref<any | null>(null);
 
-// Funções para o Modal de Raspadinha
-const openScratchModal = (coupon: any) => {
-    selectedCouponForScratch.value = coupon;
-    isScratchModalOpen.value = true;
-};
-
-const closeScratchModal = () => {
-    isScratchModalOpen.value = false;
-    selectedCouponForScratch.value = null;
-};
-
 // Cover settings from the blog settings
 const coverSettings = computed(() => {
     try {
         const config = settings.value.cover;
         return config ? JSON.parse(config) : { layoutType: 'full' };
     } catch (err) {
-        console.error('Error parsing cover settings:', err);
+        //console.error('Error parsing cover settings:', err);
         return { layoutType: 'full' };
     }
 });
@@ -650,39 +672,72 @@ const loadData = async () => {
         loading.value = true;
         error.value = null;
 
-        // Parallel loading of posts, campaigns, featured coupons (antigo carrossel) and top 25 weekly coupons
-        const [postsResponse, campaignsData, couponsResponse, weeklyTopCouponsResponse] = await Promise.all([
-            blogAPI.posts.getAll(0),
-            affiliateAPI.campaigns.getAllWithCouponCounts(),
-            affiliateAPI.coupons.getMostViewed(), // Para o carrossel antigo
-            affiliateAPI.coupons.getTop25WeeklyCoupons() // Novo endpoint
-        ]);
+        // Verificar se já temos dados nas stores antes de fazer chamadas à API
+        let needToFetchPosts = posts.value.length === 0;
+        let needToFetchCampaigns = campaigns.value.length === 0;
+        let needToFetchFeaturedCoupons = featuredCoupons.value.length === 0;
+        let needToFetchTop25Coupons = top25Coupons.value.length === 0;
 
-        if (postsResponse) {
-            posts.value = postsResponse.posts;
+        const promises: Promise<any>[] = [];
+
+        // Só fazer chamadas se necessário
+        if (needToFetchPosts) {
+            promises.push(
+                blogAPI.posts.getAll(0).then(postsResponse => {
+                    if (postsResponse) {
+                        posts.value = postsResponse.posts;
+                        postsStore.setPosts(postsResponse.posts);
+                    }
+                })
+            );
         }
 
-        if (campaignsData && campaignsData.length > 0) {
-            campaigns.value = campaignsData;
-        } else {
-            campaigns.value = [];
+        if (needToFetchCampaigns) {
+            promises.push(
+                affiliateAPI.campaigns.getAllWithCouponCounts().then(campaignsData => {
+                    if (campaignsData && campaignsData.length > 0) {
+                        campaigns.value = campaignsData;
+                        campaignsStore.setCampaigns(campaignsData);
+                    } else {
+                        campaigns.value = [];
+                    }
+                })
+            );
         }
 
-        if (couponsResponse) { // Para o carrossel antigo
-            featuredCoupons.value = couponsResponse;
-        } else {
-            featuredCoupons.value = [];
+        if (needToFetchFeaturedCoupons) {
+            promises.push(
+                affiliateAPI.coupons.getMostViewed().then(couponsResponse => {
+                    if (couponsResponse) {
+                        featuredCoupons.value = couponsResponse;
+                        couponsStore.setFeaturedCoupons(couponsResponse);
+                    } else {
+                        featuredCoupons.value = [];
+                    }
+                })
+            );
         }
 
-        if (weeklyTopCouponsResponse) { // Novos Top 25
-            top25Coupons.value = weeklyTopCouponsResponse;
-        } else {
-            top25Coupons.value = [];
+        if (needToFetchTop25Coupons) {
+            promises.push(
+                affiliateAPI.coupons.getTop25WeeklyCoupons().then(weeklyTopCouponsResponse => {
+                    if (weeklyTopCouponsResponse) {
+                        top25Coupons.value = weeklyTopCouponsResponse;
+                        couponsStore.setTop25Coupons(weeklyTopCouponsResponse);
+                    } else {
+                        top25Coupons.value = [];
+                    }
+                })
+            );
+        }
+
+        if (promises.length > 0) {
+            await Promise.all(promises);
         }
 
     } catch (err: any) {
         error.value = err;
-        console.error("Erro ao carregar dados da Home:", err); // Log de erro
+        //console.error("Erro ao carregar dados da Home:", err);
     } finally {
         loading.value = false;
     }
@@ -696,7 +751,7 @@ const prevCouponSlide = () => {
     const numDisplayableCoupons = Math.min(10, featuredCoupons.value.length);
     if (couponSlidesVisible.value >= numDisplayableCoupons) {
         currentCouponIndex.value = 0;
-        return; 
+        return;
     }
 
     const maxStartIndex = numDisplayableCoupons - couponSlidesVisible.value;
@@ -724,6 +779,77 @@ const nextCouponSlide = () => {
     }
 };
 
+// Função para abrir deeplink em nova aba
+const openDeepLink = (url: string) => {
+    window.open(url, '_blank');
+};
+
+// Cria um iframe invisível para abrir o deeplink sem mudar o foco
+const openDeeplinkInBackground = (url: string) => {
+    // Criar um iframe invisível
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+
+    try {
+        // Definir o src do iframe para o deeplink
+        iframe.src = url;
+
+        // Limpar o iframe após um curto período
+        setTimeout(() => {
+            if (iframe && iframe.parentNode) {
+                iframe.parentNode.removeChild(iframe);
+            }
+        }, 1000);
+    } catch (e) {
+        //console.error('Erro ao abrir deeplink via iframe:', e);
+        if (iframe && iframe.parentNode) {
+            iframe.parentNode.removeChild(iframe);
+        }
+    }
+};
+
+// Funções para o Modal de Raspadinha
+const openScratchModal = (coupon: any) => {
+    // Verificar se o cupom já tem as informações da campanha
+    if (!coupon.campaignName || !coupon.campaignLogo) {
+        // Buscar a campanha correspondente se ela existir
+        const relatedCampaign = campaigns.value.find(c => c.id === coupon.campaignId);
+
+        // Criar uma cópia enriquecida do cupom com os dados da campanha
+        selectedCouponForScratch.value = {
+            ...coupon,
+            campaignName: relatedCampaign?.name || coupon.campaignName || 'Loja',
+            campaignLogo: relatedCampaign?.logo || coupon.campaignLogo || null
+        };
+    } else {
+        // Se já tem os dados da campanha, usar diretamente
+        selectedCouponForScratch.value = coupon;
+    }
+
+    // Mostrar o modal
+    isScratchModalOpen.value = true;
+
+    // Abrir uma nova janela com o código do cupom
+    if (coupon && coupon.code) {
+        window.open(window.location.href + `?display=${coupon.code}`, '_blank');
+    }
+
+    // Redirecionar para o deeplink
+    if (coupon && coupon.deeplink) {
+        window.location.href = coupon.deeplink;
+    }
+};
+
+const closeScratchModal = () => {
+    isScratchModalOpen.value = false;
+    selectedCouponForScratch.value = null;
+};
+
+onServerPrefetch(async () => {
+    await loadData();
+})
+
 onMounted(async () => {
     await loadData();
     startCarouselInterval();
@@ -738,25 +864,5 @@ watch(() => settings.value['blog.cover'], () => {
     startCarouselInterval();
 }, { deep: true });
 </script>
-
-<style scoped>
-.line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.h-18 {
-    height: 4.5rem;
-}
-</style>
 
 

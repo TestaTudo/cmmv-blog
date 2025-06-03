@@ -2,7 +2,7 @@ import {
     Controller, Get, Param,
     CacheControl, ContentType,
     Raw, Put, Body, Res,
-    Query
+    Query, Post
 } from "@cmmv/http";
 
 import {
@@ -21,6 +21,25 @@ export class CampaignsControllerTools {
     @Auth("affiliatecampaigns:update")
     async updateCampaignLogo(@Param("campaignId") campaignId: string, @Body() data: { logo: string }) {
         return await this.campaignsService.updateCampaignLogo(campaignId, data.logo);
+    }
+
+    @Post(":campaignId/generate-seo")
+    @Auth("affiliatecampaigns:update")
+    async generateSEOContent(@Param("campaignId") campaignId: string) {
+        return await this.campaignsService.generateSEOContent(campaignId);
+    }
+
+    @Post(":campaignId/start-seo-job")
+    @Auth("affiliatecampaigns:update")
+    async startSEOGenerationJob(@Param("campaignId") campaignId: string) {
+        const jobId = await this.campaignsService.startSEOGenerationJob(campaignId);
+        return { jobId, status: 'pending', message: 'SEO generation job started' };
+    }
+
+    @Get("job/:jobId/status")
+    @Auth("affiliatecampaigns:get")
+    async getAIJobStatus(@Param("jobId") jobId: string) {
+        return await this.campaignsService.getAIJobStatus(jobId);
     }
 
     @Get("public")
