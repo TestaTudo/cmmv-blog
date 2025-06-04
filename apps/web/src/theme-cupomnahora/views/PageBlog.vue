@@ -6,7 +6,7 @@
             </svg>
             <h2 class="text-2xl font-bold mb-2 text-gray-800">Erro ao carregar posts</h2>
             <p class="text-gray-600 mb-4">Não foi possível carregar os posts. Por favor, tente novamente.</p>
-            <button @click="loadPosts" class="px-4 py-2 bg-[#0a5d28] text-white rounded-md hover:bg-[#064019] transition-colors">
+            <button @click="loadPosts" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors">
                 Tentar novamente
             </button>
         </div>
@@ -29,10 +29,9 @@
                         <div class="relative h-[400px]">
                             <img
                                 v-if="coverPosts.full && coverPosts.full.featureImage"
-                                :src="getThumbnailUrl(coverPosts.full.featureImage)"
-                                :data-src="coverPosts.full.featureImage"
+                                :src="coverPosts.full.featureImage"
                                 :alt="coverPosts.full.title"
-                                class="lazy-image w-full h-full object-cover"
+                                class="w-full h-full object-cover"
                                 loading="lazy"
                                 width="890"
                                 height="606"
@@ -47,7 +46,7 @@
                             </div>
                             <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 via-black/70 to-transparent text-white">
                                 <div v-if="coverPosts.full && coverPosts.full.categories && coverPosts.full.categories.length > 0" class="mb-2">
-                                    <span class="bg-[#ffcc00] text-[#333] px-3 py-1 rounded-md text-sm font-medium">
+                                    <span class="bg-indigo-600 text-white px-3 py-1 rounded-md text-sm font-medium">
                                         {{ coverPosts.full.categories[0].name }}
                                     </span>
                                 </div>
@@ -55,7 +54,7 @@
                                 <p v-if="coverPosts.full" class="text-gray-100 mb-4 line-clamp-2 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] bg-black/25 p-2 rounded max-w-2xl">
                                     {{ coverPosts.full.excerpt || stripHtml(coverPosts.full.content).substring(0, 150) + '...' }}
                                 </p>
-                                <span class="inline-block bg-[#0a5d28] hover:bg-[#064019] text-white px-4 py-2 rounded-md transition-colors">
+                                <span class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md transition-colors">
                                     Continuar lendo
                                 </span>
                             </div>
@@ -72,10 +71,9 @@
                             <a :href="`/post/${post.slug}`" class="block h-full">
                                 <img
                                     v-if="post.featureImage"
-                                    :src="getThumbnailUrl(post.featureImage)"
-                                    :data-src="post.featureImage"
+                                    :src="post.featureImage"
                                     :alt="post.title"
-                                    class="lazy-image w-full h-full object-cover"
+                                    class="w-full h-full object-cover"
                                     loading="lazy"
                                     width="890"
                                     height="606"
@@ -90,7 +88,7 @@
                                 </div>
                                 <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 via-black/70 to-transparent text-white">
                                     <div v-if="post.categories && post.categories.length > 0" class="mb-2">
-                                        <span class="bg-[#ffcc00] text-[#333] px-3 py-1 rounded-md text-sm font-medium">
+                                        <span class="bg-indigo-600 text-white px-3 py-1 rounded-md text-sm font-medium">
                                             {{ post.categories[0].name }}
                                         </span>
                                     </div>
@@ -98,7 +96,7 @@
                                     <p class="text-gray-100 mb-4 line-clamp-2 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] bg-black/25 p-2 rounded max-w-2xl">
                                         {{ post.excerpt || stripHtml(post.content).substring(0, 150) + '...' }}
                                     </p>
-                                    <span class="inline-block bg-[#0a5d28] hover:bg-[#064019] text-white px-4 py-2 rounded-md transition-colors">
+                                    <span class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md transition-colors">
                                         Continuar lendo
                                     </span>
                                 </div>
@@ -141,10 +139,9 @@
                             <div class="relative h-full">
                                 <img
                                     v-if="coverPosts.splitMain && coverPosts.splitMain.featureImage"
-                                    :src="getThumbnailUrl(coverPosts.splitMain.featureImage)"
-                                    :data-src="coverPosts.splitMain.featureImage"
+                                    :src="coverPosts.splitMain.featureImage"
                                     :alt="coverPosts.splitMain.title"
-                                    class="lazy-image w-full h-full object-cover"
+                                    class="w-full h-full object-cover"
                                     loading="lazy"
                                     width="890"
                                     height="606"
@@ -159,7 +156,7 @@
                                 </div>
                                 <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 via-black/70 to-transparent text-white">
                                     <div v-if="coverPosts.splitMain && coverPosts.splitMain.categories && coverPosts.splitMain.categories.length > 0" class="mb-2">
-                                        <span class="bg-[#ffcc00] text-[#333] px-3 py-1 rounded-md text-sm font-medium">
+                                        <span class="bg-indigo-600 text-white px-3 py-1 rounded-md text-sm font-medium">
                                             {{ coverPosts.splitMain.categories[0].name }}
                                         </span>
                                     </div>
@@ -167,7 +164,7 @@
                                     <p v-if="coverPosts.splitMain" class="text-gray-100 mb-4 line-clamp-2 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] bg-black/25 p-2 rounded max-w-2xl">
                                         {{ coverPosts.splitMain.excerpt || stripHtml(coverPosts.splitMain.content).substring(0, 150) + '...' }}
                                     </p>
-                                    <span class="inline-block bg-[#0a5d28] hover:bg-[#064019] text-white px-4 py-2 rounded-md transition-colors">
+                                    <span class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md transition-colors">
                                         Continuar lendo
                                     </span>
                                 </div>
@@ -180,11 +177,9 @@
                                 <div class="relative h-full">
                                     <img
                                         v-if="post.featureImage"
-                                        :src="getThumbnailUrl(post.featureImage)"
-                                        :data-src="post.featureImage"
+                                        :src="post.featureImage"
                                         :alt="post.title"
-                                        class="lazy-image w-full h-full object-cover"
-                                        loading="lazy"
+                                        class="w-full h-full object-cover"
                                     />
                                     <div v-else class="w-full h-full bg-gray-300 flex items-center justify-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -193,7 +188,7 @@
                                     </div>
                                     <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 via-black/70 to-transparent text-white">
                                         <div v-if="post.categories && post.categories.length > 0" class="mb-2">
-                                            <span class="bg-[#ffcc00] text-[#333] px-2 py-1 rounded-md text-xs font-medium">
+                                            <span class="bg-indigo-600 text-white px-2 py-1 rounded-md text-xs font-medium">
                                                 {{ post.categories[0].name }}
                                             </span>
                                         </div>
@@ -215,10 +210,9 @@
                             <div class="relative h-[350px]">
                                 <img
                                     v-if="post.featureImage"
-                                    :src="getThumbnailUrl(post.featureImage)"
-                                    :data-src="post.featureImage"
+                                    :src="post.featureImage"
                                     :alt="post.title"
-                                    class="lazy-image w-full h-full object-cover"
+                                    class="w-full h-full object-cover"
                                     loading="lazy"
                                     width="890"
                                     height="606"
@@ -233,7 +227,7 @@
                                 </div>
                                 <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 via-black/70 to-transparent text-white">
                                     <div v-if="post.categories && post.categories.length > 0" class="mb-2">
-                                        <span class="bg-[#ffcc00] text-[#333] px-3 py-1 rounded-md text-sm font-medium">
+                                        <span class="bg-indigo-600 text-white px-3 py-1 rounded-md text-sm font-medium">
                                             {{ post.categories[0].name }}
                                         </span>
                                     </div>
@@ -241,7 +235,7 @@
                                     <p class="text-gray-100 mb-4 line-clamp-2 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] bg-black/25 p-2 rounded max-w-2xl">
                                         {{ post.excerpt || stripHtml(post.content).substring(0, 120) + '...' }}
                                     </p>
-                                    <span class="inline-block bg-[#0a5d28] hover:bg-[#064019] text-white px-4 py-2 rounded-md transition-colors">
+                                    <span class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md transition-colors">
                                         Continuar lendo
                                     </span>
                                 </div>
@@ -272,7 +266,7 @@
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         <!-- Left Column (Latest News) -->
                         <div class="lg:col-span-2">
-                            <h2 class="text-xl font-bold mb-6 pb-2 text-[#0a5d28] border-b-2 border-[#ffcc00]">
+                            <h2 class="text-xl font-bold mb-6 pb-2 text-indigo-600 border-b-2 border-indigo-300">
                                 Últimas Notícias
                             </h2>
 
@@ -291,8 +285,6 @@
                                                 :alt="post.title"
                                                 class="lazy-image w-full h-full object-cover transition-transform hover:scale-105 duration-300"
                                                 loading="lazy"
-                                                width="360"
-                                                height="192"
                                             />
                                             <div v-else class="w-full h-full bg-gray-200 flex items-center justify-center">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -300,7 +292,7 @@
                                                 </svg>
                                             </div>
                                             <div v-if="post.categories && post.categories.length > 0" class="absolute top-2 left-2">
-                                                <span class="bg-[#ffcc00] text-[#333] px-2 py-1 rounded-md text-xs font-medium">
+                                                <span class="bg-indigo-600 text-white px-2 py-1 rounded-md text-xs font-medium">
                                                     {{ post.categories[0].name }}
                                                 </span>
                                             </div>
@@ -308,7 +300,7 @@
                                     </a>
                                     <div class="p-4">
                                         <a :href="`/post/${post.slug}`" class="block">
-                                            <h3 class="text-lg font-bold text-gray-800 mb-2 hover:text-[#0a5d28] transition-colors line-clamp-2">
+                                            <h3 class="text-lg font-bold text-gray-800 mb-2 hover:text-indigo-600 transition-colors line-clamp-2">
                                                 {{ post.title }}
                                             </h3>
                                         </a>
@@ -337,7 +329,7 @@
 
                             <!-- More Posts Section -->
                             <div v-if="posts.length > (featuredPost ? 5 : 4)">
-                                <h2 class="text-xl font-bold mb-6 pb-2 text-[#0a5d28] border-b-2 border-[#ffcc00]">
+                                <h2 class="text-xl font-bold mb-6 pb-2 text-indigo-600 border-b-2 border-indigo-300">
                                     Mais Conteúdo
                                 </h2>
 
@@ -356,8 +348,6 @@
                                                     :alt="post.title"
                                                     class="lazy-image w-full h-full object-cover transition-transform hover:scale-105 duration-300"
                                                     loading="lazy"
-                                                    width="360"
-                                                    height="192"
                                                 />
                                                 <div v-else class="w-full h-full bg-gray-200 flex items-center justify-center">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -365,7 +355,7 @@
                                                     </svg>
                                                 </div>
                                                 <div v-if="post.categories && post.categories.length > 0" class="absolute top-2 left-2">
-                                                    <span class="bg-[#ffcc00] text-[#333] px-2 py-1 rounded-md text-xs font-medium">
+                                                    <span class="bg-indigo-600 text-white px-2 py-1 rounded-md text-xs font-medium">
                                                         {{ post.categories[0].name }}
                                                     </span>
                                                 </div>
@@ -373,7 +363,7 @@
                                         </a>
                                         <div class="p-4">
                                             <a :href="`/post/${post.slug}`" class="block">
-                                                <h3 class="text-lg font-bold text-gray-800 mb-2 hover:text-[#0a5d28] transition-colors line-clamp-2">
+                                                <h3 class="text-lg font-bold text-gray-800 mb-2 hover:text-indigo-600 transition-colors line-clamp-2">
                                                     {{ post.title }}
                                                 </h3>
                                             </a>
@@ -403,7 +393,7 @@
 
                             <!-- Loading More Indicator -->
                             <div v-if="loadingMore" class="mt-8 flex justify-center items-center py-6">
-                                <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#0a5d28]"></div>
+                                <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-600"></div>
                                 <span class="ml-3 text-gray-600">Carregando mais posts...</span>
                             </div>
 
@@ -427,7 +417,7 @@
 
                             <!-- Popular Posts Widget -->
                             <div class="bg-white rounded-lg shadow-md p-5 mb-6">
-                                <h2 class="text-xl font-bold mb-4 pb-2 text-[#0a5d28] border-b-2 border-[#ffcc00]">
+                                <h2 class="text-xl font-bold mb-4 pb-2 text-indigo-600 border-b-2 border-indigo-300">
                                     Mais Populares
                                 </h2>
 
@@ -446,8 +436,6 @@
                                                     :alt="post.title"
                                                     class="lazy-image w-full h-full object-cover"
                                                     loading="lazy"
-                                                    width="80"
-                                                    height="64"
                                                 />
                                                 <div v-else class="w-full h-full bg-gray-200 flex items-center justify-center">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -458,7 +446,7 @@
                                         </div>
                                         <div class="flex-grow">
                                             <a :href="`/post/${post.slug}`" class="block">
-                                                <h4 class="text-sm font-semibold text-gray-800 hover:text-[#0a5d28] transition-colors line-clamp-2">
+                                                <h4 class="text-sm font-semibold text-gray-800 hover:text-indigo-600 transition-colors line-clamp-2">
                                                     {{ post.title }}
                                                 </h4>
                                             </a>
@@ -484,7 +472,7 @@
 
                             <!-- Categories Widget -->
                             <div class="bg-white rounded-lg shadow-md p-5 mb-6">
-                                <h2 class="text-xl font-bold mb-4 pb-2 text-[#0a5d28] border-b-2 border-[#ffcc00]">
+                                <h2 class="text-xl font-bold mb-4 pb-2 text-indigo-600 border-b-2 border-indigo-300">
                                     Categorias
                                 </h2>
 
@@ -492,10 +480,10 @@
                                     <li v-for="category in categories" :key="category.id" class="border-b border-gray-100 last:border-0 pb-2 last:pb-0">
                                         <a
                                             :href="`/category/${category.slug}`"
-                                            class="flex justify-between items-center text-gray-700 hover:text-[#0a5d28] transition-colors"
+                                            class="flex justify-between items-center text-gray-700 hover:text-indigo-600 transition-colors"
                                         >
                                             {{ category.name }}
-                                            <span class="bg-[#0a5d28] text-white px-2 py-1 rounded-full text-xs font-medium">
+                                            <span class="bg-indigo-600 text-white px-2 py-1 rounded-full text-xs font-medium">
                                                 {{ category.postCount }}
                                             </span>
                                         </a>
@@ -536,7 +524,6 @@ import { useMostAccessedPostsStore } from '../../store/mostaccessed';
 import { formatDate, stripHtml } from '../../composables/useUtils';
 import { useAds } from '../../composables/useAds';
 
-// Declare adsbygoogle for TypeScript
 declare global {
     interface Window {
         adsbygoogle: any[];
@@ -574,6 +561,7 @@ const observerTarget = ref<HTMLElement | null>(null);
 const observer = ref<IntersectionObserver | null>(null);
 const currentCarouselIndex = ref(0);
 const carouselInterval = ref<number | null>(null);
+
 const sidebarLeftAdContainer = ref<HTMLElement | null>(null);
 let lazyLoadObserver: IntersectionObserver | null = null;
 
@@ -589,10 +577,11 @@ const getThumbnailUrl = (originalUrl: string): string => {
     const lastDotIndex = originalUrl.lastIndexOf('.');
 
     if (lastDotIndex === -1)
-        return originalUrl + '_thumb.webp';
+        return originalUrl + '_thumb';
 
     const beforeExtension = originalUrl.substring(0, lastDotIndex);
-    return `${beforeExtension}_thumb.webp`;
+    const extension = originalUrl.substring(lastDotIndex);
+    return `${beforeExtension}_thumb${extension}`;
 };
 
 /**
@@ -654,12 +643,10 @@ const cleanupLazyLoading = () => {
     }
 };
 
-// Create formatted settings object for useAds
 const adPluginSettings = computed(() => {
     return settings.value || {};
 });
 
-// Set up ads functionality using the composable
 const { adSettings, getAdHtml, loadAdScripts, loadSidebarLeftAd } = useAds(adPluginSettings.value, 'home');
 
 const coverSettings = computed(() => {
@@ -692,13 +679,11 @@ const coverPosts = computed(() => {
         const shouldRespectSelectedPosts = config.respectSelectedPosts !== false;
 
         if (shouldRespectSelectedPosts) {
-            // Handle "full" layout
             if (config.layoutType === 'full' && config.fullCover?.postId) {
                 const configPost = posts.value.find(p => p.id === config.fullCover.postId);
                 if (configPost) result.full = configPost;
             }
 
-            // Handle "carousel" layout
             if (config.layoutType === 'carousel' && Array.isArray(config.carousel)) {
                 const carouselPostIds = config.carousel
                     .filter(item => item && item.postId)
@@ -713,15 +698,12 @@ const coverPosts = computed(() => {
                 }
             }
 
-            // Handle "split" layout
             if (config.layoutType === 'split') {
-                // Main post
                 if (config.split?.main?.postId) {
                     const mainPost = posts.value.find(p => p.id === config.split.main.postId);
                     if (mainPost) result.splitMain = mainPost;
                 }
 
-                // Secondary posts
                 if (Array.isArray(config.split?.secondary)) {
                     const secondaryPostIds = config.split.secondary
                         .filter(item => item && item.postId)
@@ -737,7 +719,6 @@ const coverPosts = computed(() => {
                 }
             }
 
-            // Handle "dual" layout
             if (config.layoutType === 'dual' && Array.isArray(config.dual)) {
                 const dualPostIds = config.dual
                     .filter(item => item && item.postId)
@@ -925,9 +906,9 @@ onMounted(async () => {
     loading.value = false;
     setupIntersectionObserver();
     startCarouselInterval();
+    initLazyLoading();
     loadAdScripts();
     loadSidebarLeftAd(sidebarLeftAdContainer.value);
-    initLazyLoading();
 });
 
 onUnmounted(() => {
@@ -935,7 +916,6 @@ onUnmounted(() => {
         observer.value.unobserve(observerTarget.value);
         observer.value.disconnect();
     }
-
     stopCarouselInterval();
     cleanupLazyLoading();
 });
@@ -947,7 +927,6 @@ watch(() => settings.value['blog.cover'], () => {
 </script>
 
 <style scoped>
-/* Lazy loading styles */
 .lazy-image {
     transition: opacity 0.3s ease-in-out;
     opacity: 0.8;
@@ -962,12 +941,10 @@ watch(() => settings.value['blog.cover'], () => {
     filter: grayscale(0.2);
 }
 
-/* Ensure smooth transitions for all images */
 img {
     transition: opacity 0.2s ease-in-out;
 }
 
-/* Loading placeholder effect */
 .lazy-image:not(.loaded):not(.error) {
     background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
     background-size: 200% 100%;
@@ -998,7 +975,6 @@ img {
     border-radius: 4px;
 }
 
-/* Only hide the left sidebar on screens smaller than 1280px */
 @media (max-width: 1280px) {
     .ad-sidebar-left {
         display: none;
