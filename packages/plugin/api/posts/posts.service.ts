@@ -50,9 +50,7 @@ export class PostsPublicService {
 
     @Cron(CronExpression.EVERY_5_MINUTES)
     async handleCronJobs() {
-        await this.processCrons.call(this);
-        await this.recalculateCategories.call(this);
-        return true;
+        return await this.processCrons.call(this);
     }
 
     /**
@@ -101,112 +99,62 @@ export class PostsPublicService {
         }, [], {
             select: [
                 "id", "title", "slug", "content", "status", "autoPublishAt",
-                "authors", "author", "categories", "featureImage", "publishedAt",
-                "updatedAt", "createdAt", "comments", "views"
+                "authors", "author", "featureImage", "publishedAt",
+                "updatedAt", "createdAt", "comments", "views", "tags", "excerpt",
+                "categories"
             ],
             order: {
                 publishedAt: "DESC",
                 status: "ASC",
                 autoPublishAt: "DESC",
-
             }
         });
 
         let authors: any[] = [];
         let categories: any[] = [];
 
+        const categoriesData = await Repository.findAll(CategoriesEntity, {
+            limit: 100
+        }, [], {
+            select: [ "id", "name", "slug", "description" ]
+        });
+
+        const authorsData = await Repository.findAll(ProfilesEntity, {
+            limit: 100
+        }, [], {
+            select: [
+                'id', 'user', 'name', 'slug', 'image', 'coverImage',
+                'bio', 'website', 'location', 'facebook', 'twitter', 'locale',
+                'visibility', 'metaTitle', 'metaDescription', 'lastSeen',
+                'commentNotifications', 'mentionNotifications', 'recommendationNotifications'
+            ]
+        });
+
         if(posts){
             let userIdsIn: string[] = [];
-            let categoryIdsIn: string[] = [];
 
             for (const post of posts.data) {
                 if (post.status === 'cron' && post.autoPublishAt)
                     post.scheduledPublishDate = new Date(post.autoPublishAt).toLocaleString();
 
-                userIdsIn = [...userIdsIn, ...post.authors];
-
                 if(post.author !== "current-user-id")
                     userIdsIn.push(post.author);
 
-                if(post.categories && post.categories.length > 0){
-                    categoryIdsIn = [...categoryIdsIn, ...post.categories];
+                if(post.author)
+                    post.author = authorsData?.data?.find((author: any) => author.user === post.author);
 
-                    const categoriesData = await Repository.findAll(CategoriesEntity, {
-                        id: In(post.categories),
-                        limit: 100
-                    }, [], {
-                        select: [ "id", "name", "slug", "description" ]
-                    });
-
-                    post.categories = (categoriesData) ? categoriesData.data : [];
-                }
-
-                if(post.featureImage){
-                    post.featureImage = await this.mediasService.getImageUrl(
-                        post.featureImage,
-                        "webp",
-                        1200,
-                        post.featureImageAlt,
-                        post.featureImageCaption
-                    );
-                }
+                post.categories = (categoriesData) ? post.categories.map((category: any) =>
+                    categoriesData.data.find((c: any) => c.id === category)
+                ) : [];
             }
-
-            //@ts-ignore
-            const usersIn = [...new Set(userIdsIn)];
-            //@ts-ignore
-            const categoryIn = [...new Set(categoryIdsIn)];
-
-            const authorsData = await Repository.findAll(ProfilesEntity, {
-                user: In(usersIn),
-                limit: 100
-            }, [], {
-                select: [
-                    'id', 'user', 'name', 'slug', 'image', 'coverImage',
-                    'bio', 'website', 'location', 'facebook', 'twitter', 'locale',
-                    'visibility', 'metaTitle', 'metaDescription', 'lastSeen',
-                    'commentNotifications', 'mentionNotifications', 'recommendationNotifications'
-                ]
-            });
-
-            if(authorsData){
-                for(const author of authorsData.data){
-                    author.image = await this.mediasService.getImageUrl(
-                        author.image,
-                        "webp",
-                        128,
-                        author.name,
-                        author.name
-                    );
-
-                    author.coverImage = await this.mediasService.getImageUrl(
-                        author.coverImage,
-                        "webp",
-                        1024,
-                        author.name,
-                        author.name
-                    );
-                }
-            }
-
-            authors = (authorsData) ? authorsData.data : [];
-
-            const categoriesData = await Repository.findAll(CategoriesEntity, {
-                id: In(categoryIn),
-                limit: 100
-            }, [], {
-                select: [ "id", "name", "slug", "description" ]
-            });
-
-            categories = (categoriesData) ? categoriesData.data : [];
         }
 
         return {
             posts: (posts) ? posts.data : [],
             count: (posts) ? posts.count : 0,
             pagination: (posts) ? posts.pagination : null,
-            authors,
-            categories
+            authors: authorsData?.data,
+            categories: categoriesData?.data
         };
     }
 
@@ -255,113 +203,63 @@ export class PostsPublicService {
             deleted: false
         }, [], {
             select: [
-                "id", "title", "slug",
+                "id", "title", "slug", "content", "status", "autoPublishAt",
                 "authors", "author", "featureImage", "publishedAt",
-                "updatedAt", "createdAt", "comments", "views"
+                "updatedAt", "createdAt", "comments", "views", "tags", "excerpt",
+                "categories"
             ],
             order: {
                 publishedAt: "DESC",
                 status: "ASC",
                 autoPublishAt: "DESC",
-
             }
         });
 
         let authors: any[] = [];
         let categories: any[] = [];
 
+        const categoriesData = await Repository.findAll(CategoriesEntity, {
+            limit: 100
+        }, [], {
+            select: [ "id", "name", "slug", "description" ]
+        });
+
+        const authorsData = await Repository.findAll(ProfilesEntity, {
+            limit: 100
+        }, [], {
+            select: [
+                'id', 'user', 'name', 'slug', 'image', 'coverImage',
+                'bio', 'website', 'location', 'facebook', 'twitter', 'locale',
+                'visibility', 'metaTitle', 'metaDescription', 'lastSeen',
+                'commentNotifications', 'mentionNotifications', 'recommendationNotifications'
+            ]
+        });
+
         if(posts){
             let userIdsIn: string[] = [];
-            let categoryIdsIn: string[] = [];
 
             for (const post of posts.data) {
                 if (post.status === 'cron' && post.autoPublishAt)
                     post.scheduledPublishDate = new Date(post.autoPublishAt).toLocaleString();
 
-                userIdsIn = [...userIdsIn, ...post.authors];
-
                 if(post.author !== "current-user-id")
                     userIdsIn.push(post.author);
 
-                if(post.categories && post.categories.length > 0){
-                    categoryIdsIn = [...categoryIdsIn, ...post.categories];
+                if(post.author)
+                    post.author = authorsData?.data?.find((author: any) => author.user === post.author);
 
-                    const categoriesData = await Repository.findAll(CategoriesEntity, {
-                        id: In(post.categories),
-                        limit: 100
-                    }, [], {
-                        select: [ "id", "name", "slug", "description" ]
-                    });
-
-                    post.categories = (categoriesData) ? categoriesData.data : [];
-                }
-
-                if(post.featureImage){
-                    post.featureImage = await this.mediasService.getImageUrl(
-                        post.featureImage,
-                        "webp",
-                        1200,
-                        post.featureImageAlt,
-                        post.featureImageCaption
-                    );
-                }
+                post.categories = (categoriesData) ? post.categories.map((category: any) =>
+                    categoriesData.data.find((c: any) => c.id === category)
+                ) : [];
             }
-
-            //@ts-ignore
-            const usersIn = [...new Set(userIdsIn)];
-            //@ts-ignore
-            const categoryIn = [...new Set(categoryIdsIn)];
-
-            const authorsData = await Repository.findAll(ProfilesEntity, {
-                user: In(usersIn),
-                limit: 100
-            }, [], {
-                select: [
-                    'id', 'user', 'name', 'slug', 'image', 'coverImage',
-                    'bio', 'website', 'location', 'facebook', 'twitter', 'locale',
-                    'visibility', 'metaTitle', 'metaDescription', 'lastSeen',
-                    'commentNotifications', 'mentionNotifications', 'recommendationNotifications'
-                ]
-            });
-
-            if(authorsData){
-                for(const author of authorsData.data){
-                    author.image = await this.mediasService.getImageUrl(
-                        author.image,
-                        "webp",
-                        128,
-                        author.name,
-                        author.name
-                    );
-
-                    author.coverImage = await this.mediasService.getImageUrl(
-                        author.coverImage,
-                        "webp",
-                        1024,
-                        author.name,
-                        author.name
-                    );
-                }
-            }
-
-            authors = (authorsData) ? authorsData.data : [];
-
-            const categoriesData = await Repository.findAll(CategoriesEntity, {
-                id: In(categoryIn),
-                limit: 100
-            }, [], {
-                select: [ "id", "name", "slug", "description" ]
-            });
-
-            categories = (categoriesData) ? categoriesData.data : [];
         }
 
         return {
             posts: (posts) ? posts.data : [],
             count: (posts) ? posts.count : 0,
             pagination: (posts) ? posts.pagination : null,
-            authors,
-            categories
+            authors: authorsData?.data,
+            categories: categoriesData?.data
         };
     }
 
@@ -475,13 +373,9 @@ export class PostsPublicService {
             const currentId = queue.shift();
             if (!currentId) continue;
 
-            // Fetch the full category object to inspect its structure
             const category: CategoryWithParent | null = await Repository.findOne(CategoriesEntity,
                 { id: currentId }
             );
-
-            // CRUCIAL LOG: Inspect the structure of the fetched category object
-            this.logger.log(`Fetched category object for ID ${currentId}: ${JSON.stringify(category)}`);
 
             if (category && category.parentCategory) {
                 let parentId: string | null = null;
@@ -571,8 +465,10 @@ export class PostsPublicService {
             if (data.post.categories && data.post.categories.length > 0) {
                 try {
                     const allCategoriesWithParents = await this.getAllParentCategoryIds(data.post.categories, CategoriesEntity);
-                    data.post.categories = [...new Set(allCategoriesWithParents)]; // Ensure uniqueness
-                } catch (catError) {}
+                    data.post.categories = [...new Set(allCategoriesWithParents)];
+                } catch (catError) {
+                    this.logger.error(`Error processing parent categories for post ${data.post.id || 'new'}: ${catError}`);
+                }
             }
 
             const post: any = await Repository.updateOne(
@@ -605,6 +501,7 @@ export class PostsPublicService {
             }
 
             await this.upsertTags(data.post.tags);
+            await this.recalculateCategories();
 
             return { result: true };
         }
@@ -619,8 +516,11 @@ export class PostsPublicService {
                 try {
                     const allCategoriesWithParents = await this.getAllParentCategoryIds(data.post.categories, CategoriesEntity);
                     data.post.categories = [...new Set(allCategoriesWithParents)];
-                } catch (catError) {}
+                } catch (catError) {
+                    this.logger.error(`Error processing parent categories for new post: ${catError}`);
+                }
             }
+            // --- End Parent Category Inheritance Logic for new posts ---
 
             const post: any = await Repository.insert(PostsEntity, data.post);
 
@@ -645,6 +545,7 @@ export class PostsPublicService {
             }
 
             await this.upsertTags(data.post.tags);
+            await this.recalculateCategories();
 
             return post.data;
         }
@@ -808,12 +709,14 @@ export class PostsPublicService {
 
         if(post){
             if(post.featureImage){
-                post.featureImage = await this.mediasService.getImageUrl(
+                post.featureImage = await this.processImageIfNeeded(
                     post.featureImage,
                     "webp",
                     1200,
-                    post.featureImageAlt,
-                    post.featureImageCaption
+                    675,
+                    80,
+                    "",
+                    ""
                 );
             }
 
@@ -853,21 +756,29 @@ export class PostsPublicService {
             post.authors = (authorsData) ? authorsData.data : [];
 
             for(let key in post.authors){
-                post.authors[key].image = await this.mediasService.getImageUrl(
-                    post.authors[key].image,
-                    "webp",
-                    128,
-                    post.authors[key].name,
-                    post.authors[key].name
-                );
+                if(post.authors[key].image){
+                    post.authors[key].image = await this.processImageIfNeeded(
+                        post.authors[key].image,
+                        "webp",
+                        128,
+                        128,
+                        80,
+                        "",
+                        ""
+                    );
+                }
 
-                post.authors[key].coverImage = await this.mediasService.getImageUrl(
-                    post.authors[key].coverImage,
-                    "webp",
-                    1024,
-                    post.authors[key].name,
-                    post.authors[key].name
-                );
+                if(post.authors[key].coverImage){
+                    post.authors[key].coverImage = await this.processImageIfNeeded(
+                        post.authors[key].coverImage,
+                        "webp",
+                        1024,
+                        300,
+                        80,
+                        "",
+                        ""
+                    );
+                }
             }
 
             if(categoryIn.length > 0){
@@ -920,12 +831,14 @@ export class PostsPublicService {
 
         if(page){
             if(page.featureImage){
-                page.featureImage = await this.mediasService.getImageUrl(
+                page.featureImage = await this.processImageIfNeeded(
                     page.featureImage,
                     "webp",
                     1200,
-                    page.featureImageAlt,
-                    page.featureImageCaption
+                    675,
+                    80,
+                    "",
+                    ""
                 );
             }
 
@@ -957,20 +870,24 @@ export class PostsPublicService {
             page.authors = (authorsData) ? authorsData.data : [];
 
             for(let key in page.authors){
-                page.authors[key].image = await this.mediasService.getImageUrl(
+                page.authors[key].image = await this.processImageIfNeeded(
                     page.authors[key].image,
                     "webp",
                     128,
-                    page.authors[key].name,
-                    page.authors[key].name
+                    128,
+                    80,
+                    "",
+                    ""
                 );
 
-                page.authors[key].coverImage = await this.mediasService.getImageUrl(
+                page.authors[key].coverImage = await this.processImageIfNeeded(
                     page.authors[key].coverImage,
                     "webp",
                     1024,
-                    page.authors[key].name,
-                    page.authors[key].name
+                    300,
+                    80,
+                    "",
+                    ""
                 );
             }
         }
@@ -1014,11 +931,15 @@ export class PostsPublicService {
 
         if(posts){
             for(const post of posts.data){
-                post.featureImage = await this.mediasService.getImageUrl(
+                post.featureImage = await this.processImageIfNeeded(
                     post.featureImage,
                     "webp",
                     1200,
-                )
+                    675,
+                    80,
+                    "",
+                    ""
+                );
 
                 //Tags
                 const tagsData = await Repository.findAll(TagsEntity, {
@@ -1088,11 +1009,15 @@ export class PostsPublicService {
 
         if(posts){
             for(const post of posts.data){
-                post.featureImage = await this.mediasService.getImageUrl(
+                post.featureImage = await this.processImageIfNeeded(
                     post.featureImage,
                     "webp",
                     1200,
-                )
+                    675,
+                    80,
+                    "",
+                    ""
+                );
 
                 //Tags
                 const tagsData = await Repository.findAll(TagsEntity, {
@@ -1218,8 +1143,10 @@ export class PostsPublicService {
             deletedAt: new Date()
         });
 
-        if(resultDelete)
+        if(resultDelete){
             await this.recalculateTags();
+            await this.recalculateCategories();
+        }
 
         return { result: resultDelete };
     }
@@ -1249,10 +1176,14 @@ export class PostsPublicService {
             return [];
 
         for(const post of posts.data){
-            post.featureImage = await this.mediasService.getImageUrl(
+            post.featureImage = await this.processImageIfNeeded(
                 post.featureImage,
                 "webp",
                 1200,
+                675,
+                80,
+                "",
+                ""
             );
         }
 
@@ -1656,11 +1587,9 @@ export class PostsPublicService {
             });
 
             if (posts && posts.data.length > 0) {
-                //console.log(`[processCrons] Verificando ${posts.data.length} posts agendados. Timestamp atual: ${currentTimestamp}`);
 
                 for (const post of posts.data) {
                     if (post.autoPublishAt && post.autoPublishAt <= currentTimestamp) {
-                        //console.log(`[processCrons] Publicando post ${post.id} (agendado para ${new Date(post.autoPublishAt).toISOString()})`);
                         await this.publishPost(post.id);
                     }
                 }
@@ -1677,8 +1606,6 @@ export class PostsPublicService {
      */
     async publishPost(id: string) {
         try {
-            console.log("Publishing scheduled post with ID: " + id);
-            console.log(`Publishing scheduled post with ID: ${id}`);
             const PostsEntity = Repository.getEntity("PostsEntity");
             const post = await Repository.findOne(PostsEntity, { id });
 
@@ -1688,7 +1615,6 @@ export class PostsPublicService {
             }
 
             if (post.status !== 'cron') {
-                console.log(`Post with ID ${id} is not in 'cron' status, current status: ${post.status}`);
                 return { result: false, message: "Post is not scheduled for publication" };
             }
 
@@ -1701,11 +1627,9 @@ export class PostsPublicService {
 
             if (post.pushNotification === true) {
                 await this.eventsService.emit("posts.published", post);
-                console.log(`Push notification event emitted for post ${id}`);
             }
 
             const siteUrl = Config.get("blog.url") || "";
-            //console.log(`Clearing CDN cache for homepage after publishing scheduled post ${id}`);
 
             try {
                 const cdnService = Application.resolveProvider(CDNService);
@@ -1713,8 +1637,6 @@ export class PostsPublicService {
             } catch (error) {
                 console.error(`Error clearing CDN cache: ${error instanceof Error ? error.message : String(error)}`);
             }
-
-            //console.log(`Successfully published post with ID: ${id}`);
 
             return {
                 result: true,
@@ -1724,5 +1646,41 @@ export class PostsPublicService {
             console.error(`Error publishing post with ID ${id}: ${error instanceof Error ? error.message : String(error)}`);
             throw error;
         }
+    }
+
+    /**
+     * Processa uma imagem apenas se ela não for uma URL
+     * @param imageData - A imagem a ser processada
+     * @param format - Formato desejado
+     * @param width - Largura desejada
+     * @param height - Altura desejada
+     * @param quality - Qualidade da imagem
+     * @param alt - Texto alternativo
+     * @param caption - Legenda
+     * @returns URL da imagem processada ou a original se já for uma URL
+     */
+    private async processImageIfNeeded(
+        imageData: string | null | undefined,
+        format: string = "webp",
+        width: number,
+        height: number,
+        quality: number = 80,
+        alt: string = "",
+        caption: string = ""
+    ): Promise<string | null | undefined> {
+        if (!imageData) return imageData;
+
+        // Se a imagem já for uma URL, não reprocessa
+        if (imageData.startsWith('http')) return imageData;
+
+        return await this.mediasService.getImageUrl(
+            imageData,
+            format,
+            width,
+            height,
+            quality,
+            alt,
+            caption
+        );
     }
 }

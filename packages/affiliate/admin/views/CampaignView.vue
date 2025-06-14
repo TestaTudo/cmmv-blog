@@ -1143,7 +1143,8 @@ const campaignForm = ref({
     seoTitle: '',
     seoSubtitle: '',
     seoSmallText: '',
-    seoLongText: ''
+    seoLongText: '',
+    coupons: 0
 })
 const campaignToEdit = ref(null)
 const formErrors = ref({})
@@ -1360,7 +1361,8 @@ const openAddDialog = async () => {
         seoTitle: '',
         seoSubtitle: '',
         seoSmallText: '',
-        seoLongText: ''
+        seoLongText: '',
+        coupons: 0
     }
     formErrors.value = {}
     categorySearch.value = ''
@@ -1397,7 +1399,8 @@ const openEditDialog = async (campaign) => {
         seoTitle: campaign.seoTitle || '',
         seoSubtitle: campaign.seoSubtitle || '',
         seoSmallText: campaign.seoSmallText || '',
-        seoLongText: campaign.seoLongText || ''
+        seoLongText: campaign.seoLongText || '',
+        coupons: campaign.coupons || 0
     }
     formErrors.value = {}
     categorySearch.value = ''
@@ -1429,7 +1432,8 @@ const closeDialog = () => {
         seoTitle: '',
         seoSubtitle: '',
         seoSmallText: '',
-        seoLongText: ''
+        seoLongText: '',
+        coupons: 0
     }
     formErrors.value = {}
     campaignToEdit.value = null
@@ -1473,6 +1477,7 @@ const saveCampaign = async () => {
         });
 
         const campaignData = {
+            ...campaignForm.value,
             name: campaignForm.value.name.trim(),
             url: campaignForm.value.url.trim(),
             logo: campaignForm.value.logo,
@@ -1487,7 +1492,8 @@ const saveCampaign = async () => {
             seoTitle: campaignForm.value.seoTitle || '',
             seoSubtitle: campaignForm.value.seoSubtitle || '',
             seoSmallText: campaignForm.value.seoSmallText || '',
-            seoLongText: campaignForm.value.seoLongText || ''
+            seoLongText: campaignForm.value.seoLongText || '',
+            coupons: campaignForm.value.coupons
         }
 
         if (campaignForm.value.logo && campaignForm.value.logo.startsWith('data:')) {
@@ -1993,7 +1999,6 @@ const handleLogoImageSelect = (event) => {
         img.crossOrigin = "Anonymous"
 
         img.onload = () => {
-            console.log('Logo image loaded', { width: img.width, height: img.height })
             selectedLogoImage.value = img
             logoCropModalOpen.value = true
 

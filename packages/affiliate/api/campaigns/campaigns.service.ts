@@ -55,7 +55,7 @@ export class CampaignsServiceTools {
             logo: logoUrl
         });
 
-        return { affected: affectedRows};
+        return { affected: affectedRows };
     }
 
     /**
@@ -550,7 +550,7 @@ Respond only with the HTML formatted text using Tailwind CSS classes, without JS
 
                     } catch (error: any) {
                         errorCount++;
-                        const errorMessage = `Failed to update campaign ${campaign.name} (${campaign.id}): ${error.message}`;
+                        const errorMessage = `Failed to update campaign ${campaign.name} (${campaign.id}): ${error?.message || JSON.stringify(error) || String(error)}`;
                         errors.push(errorMessage);
                         this.logger.error(errorMessage);
                     }
@@ -813,6 +813,78 @@ Respond only with the HTML formatted text using Tailwind CSS classes, without JS
         }
 
         return campaignsWithCounts;
+    }
+
+    /**
+     * Get campaigns with filters (for admin use)
+     * @param filters Filters for campaigns
+     * @returns The filtered list of campaigns
+     */
+    async getCampaignsWithFilters(filters: any = {}) {
+        try {
+            const CampaignEntity = Repository.getEntity("AffiliateCampaignsEntity");
+
+            const queryFilters: any = {};
+
+            // Handle active filter
+            if (filters.active !== undefined) {
+                queryFilters.active = filters.active === 'true' || filters.active === true;
+            }
+
+            // Handle search
+            if (filters.search && filters.searchField) {
+                queryFilters.search = filters.search;
+                queryFilters.searchField = filters.searchField;
+            }
+
+            // Handle pagination
+            if (filters.limit) queryFilters.limit = parseInt(filters.limit);
+            if (filters.offset) queryFilters.offset = parseInt(filters.offset);
+
+            // Handle sorting
+            const sortOptions: any = {};
+            if (filters.sortBy && filters.sort) {
+                sortOptions.order = {
+                    [filters.sortBy]: filters.sort.toUpperCase()
+                };
+            } else {
+                // Default sort by name
+                sortOptions.order = {
+                    name: "ASC"
+                };
+            }
+
+            // Select only necessary fields for admin dropdown
+            sortOptions.select = [
+                "id", "name", "logo", "active", "slug", "description"
+            ];
+
+            const campaignsResult = await Repository.findAll(CampaignEntity, queryFilters, [], sortOptions);
+
+            if (!campaignsResult || !campaignsResult.data || campaignsResult.data.length === 0) {
+                return {
+                    data: [],
+                    count: 0,
+                    pagination: {
+                        limit: parseInt(filters.limit) || 10,
+                        offset: parseInt(filters.offset) || 0
+                    }
+                };
+            }
+
+            return {
+                data: campaignsResult.data,
+                count: campaignsResult.count || campaignsResult.data.length,
+                pagination: {
+                    limit: parseInt(filters.limit) || 10,
+                    offset: parseInt(filters.offset) || 0
+                }
+            };
+
+        } catch (error: any) {
+            this.logger.error(`Error getting campaigns with filters: ${error.message}`);
+            throw new Error(`Failed to get campaigns with filters: ${error.message}`);
+        }
     }
 
     /**

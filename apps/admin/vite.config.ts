@@ -55,7 +55,6 @@ export default defineConfig(async ({ mode }: ConfigEnv): Promise<UserConfig> => 
                 await new Promise(resolve => setTimeout(resolve, delay));
                 return fetchWhitelabelApiUrls(retryCount + 1, maxRetries);
             } else {
-                console.log('Max retries reached, continuing with build process');
                 return false;
             }
         }
@@ -76,17 +75,33 @@ export default defineConfig(async ({ mode }: ConfigEnv): Promise<UserConfig> => 
                 configure: (proxy: any) => {
                     proxy.on('proxyReq', (proxyReq: any, req: any) => {
                         const refreshToken = req.headers['refresh-token'];
-                        if (refreshToken) {
-                            proxyReq.setHeader('refresh-token', refreshToken);
-                        }
-
                         const whitelabelId = req.headers['x-whitelabel-id'];
-                        if (whitelabelId) {
+
+                        if (refreshToken)
+                            proxyReq.setHeader('refresh-token', refreshToken);
+
+                        if (whitelabelId)
                             proxyReq.setHeader('x-whitelabel-id', whitelabelId);
-                        }
                     });
                 },
                 rewrite: (path: string) => path.replace(/^\/api/, '')
+            },
+            '/proxy': {
+                target: apiUrl,
+                changeOrigin: true,
+                secure: true,
+                configure: (proxy: any) => {
+                    proxy.on('proxyReq', (proxyReq: any, req: any) => {
+                        const refreshToken = req.headers['refresh-token'];
+                        const whitelabelId = req.headers['x-whitelabel-id'];
+
+                        if (refreshToken)
+                            proxyReq.setHeader('refresh-token', refreshToken);
+
+                        if (whitelabelId)
+                            proxyReq.setHeader('x-whitelabel-id', whitelabelId);
+                    });
+                },
             },
             '/images': {
                 target: apiUrl,
@@ -104,7 +119,6 @@ export default defineConfig(async ({ mode }: ConfigEnv): Promise<UserConfig> => 
 
         Object.entries(whitelabelApiUrls).forEach(([id, url]) => {
             const pattern = `/${id}`;
-            console.log(`Creating proxy for whitelabel: ${pattern} -> ${url}`);
 
             proxyConfig[pattern] = {
                 target: url,
@@ -132,10 +146,12 @@ export default defineConfig(async ({ mode }: ConfigEnv): Promise<UserConfig> => 
     };
 
     return {
+        root: path.resolve(__dirname, '.'),
         plugins: [vue()],
         build: {
             chunkSizeWarningLimit: 1000000,
             rollupOptions: {
+                input: path.resolve(__dirname, 'index.html'),
                 output: {
                     manualChunks: {
                         'vue': ['vue', 'vue-router', 'pinia']
@@ -162,9 +178,7 @@ export default defineConfig(async ({ mode }: ConfigEnv): Promise<UserConfig> => 
                 '@cmmv/odds': path.resolve(__dirname, '../../packages/odds/'),
                 '@cmmv/odds/*': path.resolve(__dirname, '../../packages/odds/*'),
                 '@cmmv/newsletter': path.resolve(__dirname, '../../packages/newsletter/'),
-                '@cmmv/newsletter/*': path.resolve(__dirname, '../../packages/newsletter/*'),
-                '@cmmv/special-dates': path.resolve(__dirname, '../../packages/special-dates/'),
-                '@cmmv/special-dates/*': path.resolve(__dirname, '../../packages/special-dates/*')
+                '@cmmv/newsletter/*': path.resolve(__dirname, '../../packages/newsletter/*')
             }
         },
         server: {

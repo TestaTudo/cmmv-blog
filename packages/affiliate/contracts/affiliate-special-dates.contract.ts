@@ -4,21 +4,21 @@ import {
 } from "@cmmv/core";
 
 @Contract({
-    namespace: 'SpecialDates',
-    controllerName: 'SpecialDates',
-    controllerCustomPath: 'special-dates',
-    protoPackage: 'special-dates',
-    subPath: '/special-dates',
+    namespace: 'Affiliate',
+    controllerName: 'AffiliateSpecialDates',
+    controllerCustomPath: 'affiliate/special-dates',
+    protoPackage: 'affiliate',
+    subPath: '/affiliate',
     generateController: true,
     generateBoilerplates: false,
-    auth: false,
+    auth: true,
     options: {
         moduleContract: true,
-        databaseSchemaName: "special_dates",
+        databaseSchemaName: "affiliate_special_dates",
         databaseTimestamps: true
     }
 })
-export class SpecialDatesContract extends AbstractContract {
+export class AffiliateSpecialDatesContract extends AbstractContract {
     @ContractField({
         protoType: 'string',
         nullable: false,
@@ -34,7 +34,8 @@ export class SpecialDatesContract extends AbstractContract {
     @ContractField({
         protoType: 'string',
         nullable: true,
-        index: true
+        index: true,
+        unique: true
     })
     slug!: string;
 
@@ -45,12 +46,21 @@ export class SpecialDatesContract extends AbstractContract {
     image?: string;
 
     @ContractField({
+        protoType: 'array',
+        objectType: 'string',
+        entityType: 'string',
+        array: true,
+        nullable: true,
+        protoRepeated: true,
+        index: true
+    })
+    campaigns?: string[];
+
+    @ContractField({
         protoType: 'boolean',
         nullable: false,
         defaultValue: true,
         index: true
     })
     active!: boolean;
-
-
-} 
+}

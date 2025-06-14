@@ -462,7 +462,13 @@
                             <!-- Cover Image Section -->
                             <div class="mb-6">
                                 <div v-if="coverImage" class="relative bg-gray-100 rounded-lg overflow-hidden">
-                                    <img :src="coverImage" alt="Cover Image" class="w-full h-auto" />
+                                    <img 
+                                        :src="coverImage" 
+                                        alt="Cover Image" 
+                                        class="w-full h-auto" 
+                                        @error="handleImageError"
+                                        onerror="if(!this.src.includes('/feed/raw/imageProxy') && this.src.startsWith('http')) { this.src = '/feed/raw/imageProxy?url=' + encodeURIComponent(this.src); console.log('Aplicando proxy à imagem:', this.src); }"
+                                    />
                                 </div>
                                 <div v-else class="w-full py-12 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 flex flex-col items-center justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1338,7 +1344,6 @@ const loadChannels = async (): Promise<void> => {
 
         if (response && response.data) {
             channels.value = response.data || [];
-            //console.log(`Loaded ${channels.value.length} channels`);
         }
     } catch (err: unknown) {
         console.error('Failed to load channels:', err);
@@ -1356,7 +1361,6 @@ const loadCategories = async (): Promise<void> => {
 
         if (response && response.data) {
             categories.value = response.data || [];
-            //console.log(`Loaded ${categories.value.length} categories`);
         }
         loadingCategories.value = false;
     } catch (err: unknown) {
@@ -1467,26 +1471,19 @@ const generateAIContent = async (): Promise<void> => {
                             selectedTags.value = [...response.suggestedTags];
                         }
 
-                        // Auto-select categories based on AI suggestion
                         if (response.suggestedCategories && response.suggestedCategories.length > 0 && categories.value.length > 0) {
                             const suggestedCategoryNames = response.suggestedCategories.map((cat: string) => cat.toLowerCase());
-                            //console.log('[DEBUG] Suggested Category Names (AI):', suggestedCategoryNames);
-                            //console.log('[DEBUG] Available Categories (System):', JSON.parse(JSON.stringify(categories.value)));
-
                             const matchingCategoryIds = categories.value
                                 .filter(category => {
                                     const systemCategoryNameLower = removeAccents(category.name.toLowerCase());
                                     const normalizedSuggestedCategories = suggestedCategoryNames.map((sc: string) => removeAccents(sc));
 
-                                    // Check if the exact system category name is included in any AI suggestion string
                                     let isMatch = normalizedSuggestedCategories.some((aiSuggest: string) => aiSuggest.includes(systemCategoryNameLower));
 
-                                    // If not, check if any word from the system category name is in any AI suggestion word list
                                     if (!isMatch) {
                                         const systemWords = systemCategoryNameLower.split(/\s+/);
                                         isMatch = normalizedSuggestedCategories.some((aiSuggest: string) => {
                                             const aiWords = aiSuggest.split(/\s+/);
-                                            // Check for partial matches between individual words
                                             return systemWords.some(sysWord => 
                                                 aiWords.some(aiWord => {
                                                     let partMatch = false;
@@ -1496,51 +1493,34 @@ const generateAIContent = async (): Promise<void> => {
                                                         partMatch = sysWord.includes(aiWord) || aiWord.includes(sysWord);
                                                     }
                                                     
-                                                    //if (partMatch) {
-                                                    //    console.log(`[DEBUG] Word match: sysWord="${sysWord}", aiWord="${aiWord}" from aiSuggest="${aiSuggest}"`);
-                                                    //}
                                                     return partMatch;
                                                 })
                                             );
                                         });
                                     }
                                     
-                                    // Also check if any AI suggested category name is included in the system category name (for shorter AI suggestions)
                                     if (!isMatch) {
                                         isMatch = normalizedSuggestedCategories.some((aiSuggest: string) => systemCategoryNameLower.includes(aiSuggest));
                                     }
 
-                                    //if (isMatch) {
-                                    //    console.log(`[DEBUG] Match found: AI Suggs: "${normalizedSuggestedCategories.join(", ")}" vs System-"${category.name}" (Normalized: "${systemCategoryNameLower}") (ID: ${category.id})`);
-                                    //}
                                     return isMatch;
                                 })
                                 .map(category => category.id);
 
-                            //console.log('[DEBUG] Matching Category IDs for auto-selection:', matchingCategoryIds);
                             selectedCategories.value = [...new Set([...selectedCategories.value, ...matchingCategoryIds])];
                         }
 
                         if (previewItem.value.featureImage) {
                             try {
-                                showNotification('info', 'Processing image from original content...');
-                                const imageResponse = await adminClient.medias.processImage({
-                                    image: previewItem.value.featureImage,
-                                    format: 'webp',
-                                    maxWidth: 1060,
-                                    alt: response.title || 'Feature image',
-                                    caption: ''
-                                });
-
-                                if (imageResponse && imageResponse.url) {
-                                    coverImage.value = imageResponse.url;
-                                    showNotification('success', 'Image processed for use in AI content');
-                                }
+                                // Definir a imagem original diretamente
+                                coverImage.value = previewItem.value.featureImage;
+                                showNotification('info', 'Usando imagem original do conteúdo');
                             } catch (imgErr) {
-                                console.error('Error processing image for AI:', imgErr);
+                                console.error('Erro ao definir imagem:', imgErr);
                                 coverImage.value = null;
                             }
                         } else {
+                            console.log('Nenhuma imagem de capa disponível no item original');
                             coverImage.value = null;
                         }
 
@@ -1586,23 +1566,11 @@ const createPostFromAI = async (): Promise<void> => {
 
         if (sourceImage) {
             try {
-                showNotification('info', 'Processando imagem para o post...');
-
-                const response = await adminClient.medias.processImage({
-                    image: sourceImage,
-                    format: 'webp',
-                    maxWidth: 1060,
-                    alt: aiContent.value.title || 'Feature image',
-                    caption: ''
-                });
-
-                if (response && response.url) {
-                    processedImage = response.url;
-                    showNotification('success', 'Imagem processada com sucesso');
-                }
+                processedImage = sourceImage;
+                showNotification('info', 'Usando imagem original para o post');
             } catch (imgErr) {
-                console.error('Erro ao processar imagem:', imgErr);
-                showNotification('warning', 'Não foi possível processar a imagem, criando post sem imagem');
+                console.error('Erro ao definir imagem para o post:', imgErr);
+                processedImage = null;
             }
         }
 
@@ -1730,10 +1698,18 @@ const handleImageError = (event: Event): void => {
     const target = event.target as HTMLImageElement;
     const originalSrc = target.src;
 
+    // Verificar se é a imagem de capa do AI
+    const isCoverImage = target.alt === "Cover Image";
+    if (isCoverImage && aiContent.value && aiContent.value.featureImage) {
+        console.log('Tentando fallback para imagem de capa:', aiContent.value.featureImage);
+        // Tentar usar a imagem original do feed
+        target.src = aiContent.value.featureImage;
+        return;
+    }
+
     if (!originalSrc.includes('/feed/raw/imageProxy')) {
         const proxyUrl = `/feed/raw/imageProxy?url=${encodeURIComponent(originalSrc)}`;
-        //console.log('Tentando carregar imagem via proxy:', proxyUrl);
-
+       
         target.onerror = () => {
             console.error('Falha ao carregar imagem mesmo usando proxy:', originalSrc);
             target.src = '';
@@ -2495,6 +2471,7 @@ const toggleMoreActionsDropdown = (): void => {
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
 }
 
@@ -2502,6 +2479,7 @@ const toggleMoreActionsDropdown = (): void => {
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 1;
+    line-clamp: 1;
     -webkit-box-orient: vertical;
 }
 </style>
