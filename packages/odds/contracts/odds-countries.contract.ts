@@ -29,7 +29,8 @@ export class OddsCountriesContract extends AbstractContract {
     @ContractField({
         protoType: 'string',
         nullable: false,
-        index: true
+        index: true,
+        unique: true
     })
     code!: string;
 
@@ -38,4 +39,17 @@ export class OddsCountriesContract extends AbstractContract {
         nullable: true,
     })
     flag!: string;
+
+    @ContractField({
+        protoType: 'boolean',
+        nullable: false,
+        defaultValue: false
+    })
+    flagProcessed!: boolean;
+
+    @ContractField({
+        protoType: 'string',
+        nullable: true,
+    })
+    processedFlagUrl!: string;
 }

@@ -74,6 +74,28 @@
                     </svg>
                     Add Country
                 </button>
+                <button @click="openSyncDialog" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-md transition-colors flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                    </svg>
+                    Sync from API
+                </button>
+                <div class="relative">
+                    <button
+                        @click="processAllFlags"
+                        class="px-2.5 py-1 bg-purple-600 hover:bg-purple-700 text-white text-xs font-medium rounded-md transition-colors flex items-center"
+                        :disabled="processingAllFlags"
+                    >
+                        <svg v-if="!processingAllFlags" xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <svg v-else class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        {{ processingAllFlags ? 'Processing...' : 'Process All Flags' }}
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -162,8 +184,8 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                 <div class="flex items-center justify-center w-8 h-6">
                                     <img
-                                        v-if="country.flag"
-                                        :src="country.flag"
+                                        v-if="country.processedFlagUrl || country.flag"
+                                        :src="country.processedFlagUrl || country.flag"
                                         :alt="`${country.name} flag`"
                                         class="w-8 h-6 object-cover rounded border border-neutral-600"
                                         @error="handleImageError"
@@ -173,6 +195,17 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                         </svg>
                                     </div>
+                                    <!-- Process flag button -->
+                                    <button
+                                        v-if="country.flag && !country.flagProcessed"
+                                        @click="processFlag(country)"
+                                        title="Process flag"
+                                        class="ml-2 text-purple-400 hover:text-purple-300 transition-colors"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                        </svg>
+                                    </button>
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
@@ -277,13 +310,25 @@
                                 <div v-if="countryForm.flag" class="mt-2">
                                     <p class="text-xs text-neutral-400 mb-1">Preview:</p>
                                     <img
-                                        :src="countryForm.flag"
+                                        :src="countryForm.processedFlagUrl || countryForm.flag"
                                         :alt="`${countryForm.name} flag preview`"
                                         class="w-12 h-8 object-cover rounded border border-neutral-600"
                                         @error="handleImageError"
                                     >
                                 </div>
                                 <p v-if="formErrors.flag" class="mt-1 text-sm text-red-500">{{ formErrors.flag }}</p>
+
+                                <!-- Mostra a URL processada se existir -->
+                                <div v-if="countryForm.processedFlagUrl" class="mt-4">
+                                    <label for="processedFlagUrl" class="block text-sm font-medium text-neutral-300 mb-1">Processed Flag URL</label>
+                                    <input
+                                        id="processedFlagUrl"
+                                        :value="countryForm.processedFlagUrl"
+                                        type="text"
+                                        class="w-full px-3 py-2 bg-neutral-900 border border-neutral-700 rounded-md text-neutral-400 cursor-not-allowed"
+                                        readonly
+                                    />
+                                </div>
                             </div>
                         </div>
 
@@ -329,6 +374,51 @@
             @cancel="closeDeleteDialog"
         />
 
+        <!-- Sync from API Dialog -->
+        <div v-if="showSyncDialog" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4" style="backdrop-filter: blur(4px);">
+            <div class="bg-neutral-800 rounded-lg shadow-lg w-full max-w-md mx-auto">
+                <div class="p-6 border-b border-neutral-700 flex justify-between items-center">
+                    <h3 class="text-lg font-medium text-white">Sync Countries from API</h3>
+                    <button @click="closeSyncDialog" class="text-neutral-400 hover:text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="p-6">
+                    <form @submit.prevent="runSync">
+                        <div class="space-y-4">
+                            <div>
+                                <label for="apiSetting" class="block text-sm font-medium text-neutral-300 mb-1">API Configuration</label>
+                                <select id="apiSetting" v-model="syncForm.settingId" class="w-full px-3 py-2 bg-neutral-700 border border-neutral-600 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-blue-500" required>
+                                    <option disabled value="">Select a configuration</option>
+                                    <option v-for="setting in apiSettings" :key="setting.id" :value="setting.id">
+                                        {{ setting.name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="apiEndpoint" class="block text-sm font-medium text-neutral-300 mb-1">API Endpoint</label>
+                                <input id="apiEndpoint" v-model="syncForm.endpoint" type="text" class="w-full px-3 py-2 bg-neutral-700 border border-neutral-600 rounded-md text-white font-mono focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="/countries" required />
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end space-x-3 mt-6">
+                            <button type="button" @click="closeSyncDialog" class="px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-white rounded-md transition-colors">Cancel</button>
+                            <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors" :disabled="syncLoading">
+                                <span v-if="syncLoading" class="flex items-center">
+                                    <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                    Syncing...
+                                </span>
+                                <span v-else>Sync Now</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <!-- Toast notifications -->
         <ToastNotification
             :show="notification.show"
@@ -340,7 +430,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, watch, nextTick } from 'vue'
 import { useOddsClient } from '../client'
 import Pagination from '@cmmv/blog/admin/components/Pagination.vue'
@@ -359,7 +449,8 @@ const isEditing = ref(false)
 const countryForm = ref({
     name: '',
     code: '',
-    flag: ''
+    flag: '',
+    processedFlagUrl: ''
 })
 const countryToEdit = ref(null)
 const formErrors = ref({})
@@ -368,6 +459,16 @@ const formLoading = ref(false)
 const showDeleteDialog = ref(false)
 const countryToDelete = ref(null)
 const deleteLoading = ref(false)
+
+const showSyncDialog = ref(false)
+const syncLoading = ref(false)
+const apiSettings = ref([])
+const syncForm = ref({
+    settingId: '',
+    endpoint: '/countries'
+})
+
+const processingAllFlags = ref(false)
 
 const notification = ref({
     show: false,
@@ -500,7 +601,8 @@ const openAddDialog = () => {
     countryForm.value = {
         name: '',
         code: '',
-        flag: ''
+        flag: '',
+        processedFlagUrl: ''
     }
     formErrors.value = {}
     showDialog.value = true
@@ -512,7 +614,8 @@ const openEditDialog = (country) => {
     countryForm.value = {
         name: country.name,
         code: country.code,
-        flag: country.flag || ''
+        flag: country.flag || '',
+        processedFlagUrl: country.processedFlagUrl || ''
     }
     formErrors.value = {}
     showDialog.value = true
@@ -523,7 +626,8 @@ const closeDialog = () => {
     countryForm.value = {
         name: '',
         code: '',
-        flag: ''
+        flag: '',
+        processedFlagUrl: ''
     }
     formErrors.value = {}
     countryToEdit.value = null
@@ -658,6 +762,87 @@ const handleImageError = (event) => {
     // Hide broken images
     event.target.style.display = 'none'
 }
+
+const fetchApiSettings = async () => {
+    try {
+        const response = await oddsClient.settings.get({});
+        if (response && response.data) {
+            apiSettings.value = response.data;
+        }
+    } catch (err) {
+        showNotification('error', 'Failed to load API settings.');
+        console.error('Failed to load API settings:', err);
+    }
+};
+
+const openSyncDialog = () => {
+    fetchApiSettings();
+    syncForm.value.settingId = '';
+    showSyncDialog.value = true;
+};
+
+const closeSyncDialog = () => {
+    showSyncDialog.value = false;
+};
+
+const runSync = async () => {
+    if (!syncForm.value.settingId || !syncForm.value.endpoint) {
+        showNotification('error', 'Please select a configuration and provide an endpoint.');
+        return;
+    }
+    syncLoading.value = true;
+    try {
+        const result = await oddsClient.countries.sync(syncForm.value.settingId, syncForm.value.endpoint);
+        if (result && result.success) {
+            showNotification('success', result.message || 'Synchronization completed successfully.');
+        } else {
+            throw new Error(result?.message || 'Synchronization failed with no message.');
+        }
+        closeSyncDialog();
+        refreshData();
+    } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        showNotification('error', errorMessage || 'Failed to start synchronization.');
+        console.error('Sync failed:', err);
+    } finally {
+        syncLoading.value = false;
+    }
+};
+
+const processFlag = async (country) => {
+    try {
+        const result = await oddsClient.countries.processFlag(country.id);
+
+        if (result && result.success) {
+            showNotification('success', `Flag processed for ${country.name}`);
+            refreshData();
+        } else {
+            showNotification('error', result.message || 'Failed to process flag');
+        }
+    } catch (error: any) {
+        showNotification('error', error.message || 'An unexpected error occurred');
+    }
+};
+
+const processAllFlags = async () => {
+    processingAllFlags.value = true;
+    showNotification('info', 'Starting to process all flags. This may take a moment...', 5000);
+
+    try {
+        const result = await oddsClient.countries.processAllFlags();
+        if (result.success) {
+            showNotification('success', `Processing complete! ${result.processed} flags processed, ${result.failed} failed.`, 5000);
+            refreshData();
+        } else {
+            throw new Error(result.message || 'Failed to process flags');
+        }
+    } catch (err) {
+        console.error('Failed to process flags:', err);
+        showNotification('error', err.message || 'Failed to process flags');
+    } finally {
+        processingAllFlags.value = false;
+    }
+};
 
 onMounted(() => {
     loadCountries()
