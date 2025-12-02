@@ -363,6 +363,8 @@ const initServer = async () => {
 
     setupGenericProxy();
 
+    app.use(serverStatic(serverConfig.staticDir));
+
     app.get('/', (req, res) => {
         res.setHeader('Content-Type', 'text/html');
         res.send(fs.readFileSync(path.resolve(serverConfig.staticDir, 'index.html'), 'utf8'));
@@ -372,8 +374,6 @@ const initServer = async () => {
         res.setHeader('Content-Type', 'text/html');
         res.send(fs.readFileSync(path.resolve(serverConfig.staticDir, 'index.html'), 'utf8'));
     });
-
-    app.use(serverStatic(serverConfig.staticDir));
 
     app.listen({ host: serverConfig.host, port: serverConfig.port })
     .then(server => {
