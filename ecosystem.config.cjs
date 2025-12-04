@@ -1,6 +1,6 @@
 const path = require('path');
 
-const NODE_PATH = '/root/.nvm/versions/node/v22.15.0';
+const NODE_PATH = '/root/.local/share/fnm/node-versions/v22.15.0/installation';
 const NODE_BIN = NODE_PATH + '/bin';
 
 module.exports = {
