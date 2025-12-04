@@ -1,16 +1,20 @@
 const path = require('path');
 
+const NODE_PATH = '/root/.nvm/versions/node/v22.15.0';
+const NODE_BIN = NODE_PATH + '/bin';
+
 module.exports = {
     apps: [
         {
             name: "Blog",
-            script: 'pnpm',
+            script: NODE_BIN + '/pnpm',
             args: 'start',
-            interpreter: process.env.HOME + '/.nvm/versions/node/v22.15.0/bin/node',
+            interpreter: NODE_BIN + '/node',
             cwd: __dirname,
             env: {
                 NODE_ENV: 'production',
-                PATH: process.env.HOME + '/.nvm/versions/node/v22.15.0/bin:' + process.env.PATH
+                PATH: NODE_BIN + ':/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+                HOME: '/root'
             },
             error_file: './logs/pm2-error.log',
             out_file: './logs/pm2-out.log',
